@@ -470,7 +470,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_cicd_pipeline">3.4. CI/CD Pipeline</a></li>
 </ul>
 </li>
-<li><a href="#_alternativen">4. Alternativen</a></li>
+<li><a href="#_alternativen">4. Alternativen</a>
+<ul class="sectlevel2">
+<li><a href="#_kriterienkatalog_github_actions_vs_jenkins_azure_pipelines_und_circleci">4.1. Kriterienkatalog: GitHub Actions vs. Jenkins, Azure Pipelines und CircleCI</a></li>
+</ul>
+</li>
 <li><a href="#_github_actions_pipeline_des_projektes">5. GitHub Actions Pipeline des Projektes</a></li>
 <li><a href="#_quellen">6. Quellen</a></li>
 </ul>
@@ -569,7 +573,84 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_alternativen"><a class="anchor" href="#_alternativen"></a>4. Alternativen</h2>
 <div class="sectionbody">
-
+<div class="ulist">
+<ul>
+<li>
+<p>Azure Pipelines</p>
+</li>
+<li>
+<p>Jenkins</p>
+</li>
+<li>
+<p>Circle CI</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_kriterienkatalog_github_actions_vs_jenkins_azure_pipelines_und_circleci"><a class="anchor" href="#_kriterienkatalog_github_actions_vs_jenkins_azure_pipelines_und_circleci"></a>4.1. Kriterienkatalog: GitHub Actions vs. Jenkins, Azure Pipelines und CircleCI</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 7.6923%;">
+<col style="width: 23.0769%;">
+<col style="width: 23.0769%;">
+<col style="width: 23.0769%;">
+<col style="width: 23.077%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Kriterium</th>
+<th class="tableblock halign-left valign-top">GitHub Actions</th>
+<th class="tableblock halign-left valign-top">Jenkins</th>
+<th class="tableblock halign-left valign-top">Azure Pipelines</th>
+<th class="tableblock halign-left valign-top">CircleCI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nahtlose Integration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einfache Workflow-Definition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kosteneffizienz</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Umfangreiche Marketplace-Ressourcen</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Skalierbarkeit und Wartungsfreundlichkeit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integrierte Sicherheitsfeatures</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">o</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -588,7 +669,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-04 17:46:48 UTC
+Last updated 2024-11-04 18:09:47 UTC
 </div>
 </div>
 </body>
