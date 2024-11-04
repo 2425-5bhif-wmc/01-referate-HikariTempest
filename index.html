@@ -456,15 +456,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_übersicht">1. Übersicht</a></li>
-<li><a href="#_gebrauch">2. Gebrauch</a>
+<li><a href="#_übersicht">1. Übersicht</a>
 <ul class="sectlevel2">
-<li><a href="#_ohne_github_actions">2.1. Ohne GitHub Actions</a></li>
-<li><a href="#_mit_github_actions">2.2. Mit GitHub Actions</a></li>
+<li><a href="#_enthaltene_skripte">1.1. Enthaltene Skripte</a></li>
 </ul>
 </li>
-<li><a href="#_alternativen">3. Alternativen</a></li>
-<li><a href="#_quellen">4. Quellen</a></li>
+<li><a href="#_gebrauch">2. Gebrauch</a></li>
+<li><a href="#_cicd">3. CI/CD</a>
+<ul class="sectlevel2">
+<li><a href="#_continuous_integration_ci">3.1. Continuous Integration (CI)</a></li>
+<li><a href="#_continuous_delivery_cd">3.2. Continuous Delivery (CD)</a></li>
+<li><a href="#_continuous_deployment">3.3. Continuous Deployment</a></li>
+<li><a href="#_cicd_pipeline">3.4. CI/CD Pipeline</a></li>
+</ul>
+</li>
+<li><a href="#_alternativen">4. Alternativen</a></li>
+<li><a href="#_github_actions_pipeline_des_projektes">5. GitHub Actions Pipeline des Projektes</a></li>
+<li><a href="#_quellen">6. Quellen</a></li>
 </ul>
 </div>
 </div>
@@ -472,30 +480,106 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_übersicht"><a class="anchor" href="#_übersicht"></a>1. Übersicht</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>Dieses Projekt wurde im Rahmen einer Präsentation über GitHub Actions entwickelt und enthält drei von mir erstellte GitHub Action-Skripte sowie Erläuterungen zu deren Funktionsweise und Einsatz.</p>
+</div>
+<div class="sect2">
+<h3 id="_enthaltene_skripte"><a class="anchor" href="#_enthaltene_skripte"></a>1.1. Enthaltene Skripte</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Build</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dieses Skript erstellt ein Docker-Image aus einem kleinen Maven-Java-Projekt und pusht das fertige Image in die Container Registry "ghcr.io".</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Deploy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Hier wird das zuvor erstellte Image in einer Kubernetes-Umgebung aktualisiert. Die Bereitstellung erfolgt mittels <code>kubectl</code> und einer in den GitHub Secrets gespeicherten <code>kubectl</code>-Konfigurationsdatei.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Release Artifacts</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dieses Skript erstellt ein Prerelease auf GitHub. Dabei werden alle Commits seit dem letzten Release zusammengefasst und mit den Commit-Nachrichten sowie dem <code>.jar</code>-Artefakt der Maven-Java-Anwendung veröffentlicht.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_gebrauch"><a class="anchor" href="#_gebrauch"></a>2. Gebrauch</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_ohne_github_actions"><a class="anchor" href="#_ohne_github_actions"></a>2.1. Ohne GitHub Actions</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_mit_github_actions"><a class="anchor" href="#_mit_github_actions"></a>2.2. Mit GitHub Actions</h3>
-
+<div class="paragraph">
+<p>GitHub Actions ist ein CI/CD-Tool, das automatisierte Workflows direkt in GitHub ermöglicht, um Entwicklungsprozesse wie Tests, Builds und Bereitstellungen zu beschleunigen und zu zentralisieren. Ohne GitHub Actions sind diese Prozesse oft manuell und fehleranfälliger, was mehr Zeit und Ressourcen beansprucht.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_alternativen"><a class="anchor" href="#_alternativen"></a>3. Alternativen</h2>
+<h2 id="_cicd"><a class="anchor" href="#_cicd"></a>3. CI/CD</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/ci-cd-cd-atlassian.png" alt="ci cd cd atlassian">
+</div>
+</div>
+<div class="sect2">
+<h3 id="_continuous_integration_ci"><a class="anchor" href="#_continuous_integration_ci"></a>3.1. Continuous Integration (CI)</h3>
+<div class="paragraph">
+<p>Entwickler integrieren häufig ihre Änderungen in den Hauptzweig, wodurch Builds und Tests automatisch laufen. So werden Integrationsprobleme frühzeitig vermieden.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_continuous_delivery_cd"><a class="anchor" href="#_continuous_delivery_cd"></a>3.2. Continuous Delivery (CD)</h3>
+<div class="paragraph">
+<p>Auf CI aufbauend, stellt CD sicher, dass alle Änderungen nach dem Build automatisch in eine Test- oder Produktionsumgebung gelangen und bei Bedarf jederzeit veröffentlicht werden können.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_continuous_deployment"><a class="anchor" href="#_continuous_deployment"></a>3.3. Continuous Deployment</h3>
+<div class="paragraph">
+<p>Jede Änderung, die alle Tests besteht, wird ohne menschliches Eingreifen direkt für die Nutzer bereitgestellt, was schnelle Feedback-Schleifen ermöglicht.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cicd_pipeline"><a class="anchor" href="#_cicd_pipeline"></a>3.4. CI/CD Pipeline</h3>
+<div class="imageblock">
+<div class="content">
+<img src="images/cicd-pipeline.png" alt="cicd pipeline">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_alternativen"><a class="anchor" href="#_alternativen"></a>4. Alternativen</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>4. Quellen</h2>
+<h2 id="_github_actions_pipeline_des_projektes"><a class="anchor" href="#_github_actions_pipeline_des_projektes"></a>5. GitHub Actions Pipeline des Projektes</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>6. Quellen</h2>
 <div class="sectionbody">
 
 </div>
@@ -504,7 +588,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-04 10:28:21 UTC
+Last updated 2024-11-04 17:46:48 UTC
 </div>
 </div>
 </body>
