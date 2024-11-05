@@ -1,5 +1,5 @@
 = GitHub Actions: Automatisierung von CI/CD-Prozessen
-:author: firstname lastname
+:author: Arwed Schnalzenberger
 :email: a.schnalzenberger@HTBLALeonding.onmicrosoft.com
 :revnumber: 1.0
 :revdate: {docdate}
@@ -32,6 +32,8 @@ endif::[]
 //:title-slide-background-image: img.png
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
+
+== Übersicht
 
 GitHub Actions ist ein CI/CD-Tool,
 das automatisierte Workflows direkt in GitHub ermöglicht.
