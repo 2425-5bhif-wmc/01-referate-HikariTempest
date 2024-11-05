@@ -77,6 +77,10 @@ image::cicd-pipeline.png[]
 
 image::criteria-catalog.png[]
 
+== GitHub Actions
+
+<<./github-actions-scripts.adoc#_github_actions_skripts,GitHub Actions Skripts>>
+
 == Quellen
 
 * Docker. Dockerignore-Dateien: https://docs.docker.com/build/concepts/context/#dockerignore-files

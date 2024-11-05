@@ -1,0 +1,142 @@
+[#_github_actions_skripts]
+= GitHub Actions Skripts
+Arwed Schnalzenberger
+1.0.0, {docdate}
+:imagesdir: img
+:icons: font
+:sectnums:    // Nummerierung der Überschriften / section numbering
+// :toc:
+// :toclevels: 1
+:experimental:
+//https://gist.GitHub.com/dcode/0cfbf2699a1fe9b46ff04c41721dda74?permalink_comment_id=3948218
+ifdef::env-GitHub[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+== GitHub Actions
+
+image::github-actions-easy-explanation.png[]
+
+== Grundlegender Skript Aufbau
+
+.example.yaml
+[source,yaml]
+----
+name: example github action
+
+on: push #<.>
+
+jobs: #<.>
+  example-job-1:
+    name: job 1
+    runs-on: ubuntu-24.04 #<.>
+    steps: #<.>
+      - name: step 1
+        run: #bash code 1
+
+      - uses: actions/checkout@v4 #<.>
+
+      - name: step 3
+        run: #bash code 3
+
+----
+
+<.> Aktivierungkondition für diesen Worflow
+<.> Ein Skript besteht aus einem oder mehreren "Jobs", die Parallel, auf eigenen Umgebungen laufen.
+<.> Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04".
+<.> Aufgaben/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.
+<.> `uses`:
+* Das uses-Schlüsselwort gibt an, welche Aktion während des Workflows ausgeführt werden soll.
+
+* `actions/checkout@v4` bedeutet, dass der Workflow die Action `checkout` aus dem actions-Repository verwendet. Insbesondere Version 4 dieser Aktion.
+
+* Dadurch kann der Workflow auf den Code und die Dateien des Repositorys zugreifen.
+
+== Events
+
+Eine GitHub Action kann durch unterschiedliche Events ausgelöst werden:
+
+.example.yaml
+[source,yaml]
+----
+name: example github action
+
+on:
+  push: #<.>
+    paths: #<.>
+      - 'vehicle/**'
+      - '.github/workflows/build.yaml'
+    branches: #<.>
+      - main
+  pull_request: #<.>
+    branches:
+      - main
+  workflow_run: #<.>
+    workflows: [ "build vehicle and publish Docker image to ghcr.io" ] #<.>
+    branches:
+      - main
+    types: #<.>
+      - completed
+  workflow_dispatch: #<.>
+
+jobs:
+  ...
+
+----
+
+<.> Aktiviert bei einem "git push"
+<.> Spezifiziert, dass es nur ausgeführt wird, wenn sich etwas in den angegebenen Pfaden verändert hat.
+<.> Nur wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.
+<.> Wenn eine Pull-Request ausgeführt wird.
+<.> Wenn ein anderer Workflow ausgeführt wird.
+<.> Der Name des Workflows, der ganz oben in dessen Skript angegeben wurde.
+<.> Nur wenn der Workflow fertig (`completed`) ist.
+<.> Es taucht in GitHub bei der Action ein button auf, wodurch man diesen Workflow manuell starten kann.
+
+.GitHub Screenshot `worflow_dispatch`
+[%collapsible%]
+====
+image::github-screenshot-workflow-dispatch.png[]
+====
+
+== abc
+
+.example.yaml
+[source,yaml]
+----
+name: example github action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  example-job-1:
+    name: job 1
+    runs-on: ubuntu-24.04
+    env:
+      JAVA_VERSION: '21'
+      JAVA_DISTRIBUTION: 'temurin'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: execute code
+        working-directory: ./abc
+        run: | # multi line string operator
+          dir
+
+----
+
+
+
