@@ -1,6 +1,7 @@
 name: deploy vehicle to leocloud
 
-concurrency: production # allow maximum of one running and pending job
+concurrency: # allow maximum of one running and pending job per group
+  group: production
 
 on:
   workflow_run:

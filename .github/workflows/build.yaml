@@ -1,6 +1,7 @@
 name: build vehicle and publish Docker image to ghcr.io
 
-concurrency: production # allow maximum of one running and pending job
+concurrency: # allow maximum of one running and pending job per group
+  group: production
 
 on:
   push:
