@@ -1,0 +1,30 @@
+@startuml
+skinparam componentStyle rectangle
+
+agent [Main]
+note right
+Commits A + B + C
+happen at nearly the
+same time and start
+the same GitHub
+Actions scripts of
+the same concurrency
+group.
+end note
+
+agent [Runner A] #palegreen;line:green;line.bold;text:green;
+note right: In Progress
+agent [Runner B] #pink;line:red;line.dashed;text:red;
+note right: Canceled
+agent [Runner C] #palegreen;line:green;line.dashed;text:green;
+note right: In Queue
+
+[Main]-d-"Commit A"
+"Commit A"--"Commit B"
+"Commit B"--"Commit C"
+
+"Commit A"-r->[Runner A]
+"Commit B"-r->[Runner B]
+"Commit C"-r->[Runner C]
+
+@enduml
