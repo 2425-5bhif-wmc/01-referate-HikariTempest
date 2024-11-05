@@ -575,17 +575,19 @@ pre.rouge .gs {
 <li><a href="#_voraussetzungen">1.1. Voraussetzungen</a></li>
 </ul>
 </li>
-<li><a href="#_dockerfile_position">2. Dockerfile Position</a></li>
-<li><a href="#_dockerfile_setup_für_die_github_actions_pipeline">3. Dockerfile Setup für die GitHub Actions Pipeline</a>
+<li><a href="#_dockerfile_setup_für_die_github_actions_pipeline">2. Dockerfile Setup für die GitHub Actions Pipeline</a>
 <ul class="sectlevel2">
-<li><a href="#_schritte_zum_einrichten_und_kopieren_des_dockerfiles">3.1. Schritte zum Einrichten und Kopieren des Dockerfiles</a></li>
+<li><a href="#_schritte_zum_einrichten_und_kopieren_des_dockerfiles">2.1. Schritte zum Einrichten und Kopieren des Dockerfiles</a></li>
 </ul>
 </li>
-<li><a href="#_setup_k8s">4. Setup k8s</a></li>
-<li><a href="#_k8s_file">5. k8s file</a></li>
-<li><a href="#_env_variables_of_the_workflows">6. env variables of the workflows</a></li>
-<li><a href="#_kubectl_config">7. kubectl config</a></li>
-<li><a href="#_permissions">8. Permissions</a></li>
+<li><a href="#_leocloud_setup">3. Leocloud Setup</a>
+<ul class="sectlevel2">
+<li><a href="#_schritte_zur_einrichtung">3.1. Schritte zur Einrichtung</a></li>
+</ul>
+</li>
+<li><a href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows">4. Weitere wichtige Umgebungsvariablen in den Workflows</a></li>
+<li><a href="#_kubectl_config">5. kubectl config</a></li>
+<li><a href="#_permissions">6. Permissions</a></li>
 </ul>
 </div>
 </div>
@@ -621,13 +623,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_dockerfile_position"><a class="anchor" href="#_dockerfile_position"></a>2. Dockerfile Position</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_dockerfile_setup_für_die_github_actions_pipeline"><a class="anchor" href="#_dockerfile_setup_für_die_github_actions_pipeline"></a>3. Dockerfile Setup für die GitHub Actions Pipeline</h2>
+<h2 id="_dockerfile_setup_für_die_github_actions_pipeline"><a class="anchor" href="#_dockerfile_setup_für_die_github_actions_pipeline"></a>2. Dockerfile Setup für die GitHub Actions Pipeline</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Im <code>build.yaml</code> werden Umgebungsvariablen verwendet, um das Dockerfile korrekt zu referenzieren und zu positionieren. Hier erfährst du, wie das Dockerfile so konfiguriert wird, dass es in der Pipeline erfolgreich eingesetzt werden kann.</p>
@@ -641,7 +637,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_schritte_zum_einrichten_und_kopieren_des_dockerfiles"><a class="anchor" href="#_schritte_zum_einrichten_und_kopieren_des_dockerfiles"></a>3.1. Schritte zum Einrichten und Kopieren des Dockerfiles</h3>
+<h3 id="_schritte_zum_einrichten_und_kopieren_des_dockerfiles"><a class="anchor" href="#_schritte_zum_einrichten_und_kopieren_des_dockerfiles"></a>2.1. Schritte zum Einrichten und Kopieren des Dockerfiles</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -675,33 +671,64 @@ Im Schritt für das Erstellen und Veröffentlichen des Docker-Images wird <code>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_setup_k8s"><a class="anchor" href="#_setup_k8s"></a>4. Setup k8s</h2>
+<h2 id="_leocloud_setup"><a class="anchor" href="#_leocloud_setup"></a>3. Leocloud Setup</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Bevor man mit</p>
+<p>Für dieses Projekt ist der Zugriff auf die Leocloud-Umgebung erforderlich, um die Kubernetes-Deployment-Funktionen nutzen zu können. Bitte folge den Anweisungen im offiziellen Benutzerhandbuch, um die Leocloud korrekt einzurichten:</p>
+</div>
+<div class="paragraph">
+<p>Link zur Anleitung: <a href="https://cloud.htl-leonding.ac.at/" class="bare">https://cloud.htl-leonding.ac.at/</a></p>
+</div>
+<div class="sect2">
+<h3 id="_schritte_zur_einrichtung"><a class="anchor" href="#_schritte_zur_einrichtung"></a>3.1. Schritte zur Einrichtung</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Zugang zur Leocloud</strong>
+Öffne die Anleitung und folge den Schritten zur Registrierung und Anmeldung, falls du noch keinen Account hast.</p>
+</li>
+<li>
+<p><strong>Grundlegende Einrichtung</strong>
+Befolge die Schritte zur Installation und Konfiguration der notwendigen Tools für den Zugriff auf die Leocloud. Stelle sicher, dass du über die entsprechenden Rechte und die Konfiguration für den Zugriff auf die Kubernetes-Umgebung verfügst.</p>
+</li>
+<li>
+<p><strong>Verbindungstest</strong>
+Teste, ob die Verbindung zur Leocloud erfolgreich hergestellt werden kann, indem du die in der Anleitung beschriebenen Schritte ausführst.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Nach Abschluss dieser Einrichtung solltest du die Leocloud vollständig nutzen können, um Deployments im Rahmen des Projekts durchzuführen. Vergewissere dich, dass die <code>kubectl</code> Konfigurationsdatei die korrekten Werte enthält. Du kannst dies überprüfen, indem du den Befehl <code>kubectl config view</code> ausführst.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_k8s_file"><a class="anchor" href="#_k8s_file"></a>5. k8s file</h2>
+<h2 id="_weitere_wichtige_umgebungsvariablen_in_den_workflows"><a class="anchor" href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows"></a>4. Weitere wichtige Umgebungsvariablen in den Workflows</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In den GitHub Actions Workflows (<code>build.yaml</code> und <code>release-artifacts.yaml</code>) werden verschiedene Umgebungsvariablen (<code>env</code>) verwendet, um die Pipeline-Anforderungen und die Projektkonfiguration zu steuern. Dazu gehören Variablen wie die Java-Version und die Java-Distribution, die für den Build und das Deployment festgelegt werden können. Beispiele dafür sind:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">env</span><span class="pi">:</span>
+  <span class="na">JAVA_VERSION</span><span class="pi">:</span> <span class="s1">'</span><span class="s">21'</span>
+  <span class="na">JAVA_DISTRIBUTION</span><span class="pi">:</span> <span class="s1">'</span><span class="s">temurin'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Diese Variablen (<code>JAVA_VERSION</code> und <code>JAVA_DISTRIBUTION</code>) sorgen dafür, dass beide Workflows mit der gewünschten Java-Version und Distribution ausgeführt werden, wodurch eine konsistente Umgebung gewährleistet wird. Du kannst diese Werte in den Dateien <code>build.yaml</code> und <code>release-artifacts.yaml</code> nach Bedarf anpassen.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kubectl_config"><a class="anchor" href="#_kubectl_config"></a>5. kubectl config</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_env_variables_of_the_workflows"><a class="anchor" href="#_env_variables_of_the_workflows"></a>6. env variables of the workflows</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_kubectl_config"><a class="anchor" href="#_kubectl_config"></a>7. kubectl config</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_permissions"><a class="anchor" href="#_permissions"></a>8. Permissions</h2>
+<h2 id="_permissions"><a class="anchor" href="#_permissions"></a>6. Permissions</h2>
 <div class="sectionbody">
 
 </div>
@@ -710,7 +737,7 @@ Im Schritt für das Erstellen und Veröffentlichen des Docker-Images wird <code>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-05 07:55:35 UTC
+Last updated 2024-11-05 08:07:21 UTC
 </div>
 </div>
 </body>
