@@ -583,11 +583,17 @@ pre.rouge .gs {
 <li><a href="#_leocloud_setup">3. Leocloud Setup</a>
 <ul class="sectlevel2">
 <li><a href="#_schritte_zur_einrichtung">3.1. Schritte zur Einrichtung</a></li>
+<li><a href="#_einmaliges_starten_des_kubernetes_deployments_auf_leocloud">3.2. Einmaliges Starten des Kubernetes Deployments auf Leocloud</a></li>
 </ul>
 </li>
-<li><a href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows">4. Weitere wichtige Umgebungsvariablen in den Workflows</a></li>
-<li><a href="#_kubectl_config">5. kubectl config</a></li>
-<li><a href="#_permissions">6. Permissions</a></li>
+<li><a href="#_berechtigungen_für_die_paketverwaltung_in_github">4. Berechtigungen für die Paketverwaltung in GitHub</a></li>
+<li><a href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows">5. Weitere wichtige Umgebungsvariablen in den Workflows</a></li>
+<li><a href="#_github_secrets">6. GitHub Secrets</a>
+<ul class="sectlevel2">
+<li><a href="#_zugriff_auf_die_kubernetes_konfigurationsdatei">6.1. Zugriff auf die Kubernetes-Konfigurationsdatei</a></li>
+</ul>
+</li>
+<li><a href="#_abschluss">7. Abschluss</a></li>
 </ul>
 </div>
 </div>
@@ -701,10 +707,123 @@ Teste, ob die Verbindung zur Leocloud erfolgreich hergestellt werden kann, indem
 <p>Nach Abschluss dieser Einrichtung solltest du die Leocloud vollständig nutzen können, um Deployments im Rahmen des Projekts durchzuführen. Vergewissere dich, dass die <code>kubectl</code> Konfigurationsdatei die korrekten Werte enthält. Du kannst dies überprüfen, indem du den Befehl <code>kubectl config view</code> ausführst.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_einmaliges_starten_des_kubernetes_deployments_auf_leocloud"><a class="anchor" href="#_einmaliges_starten_des_kubernetes_deployments_auf_leocloud"></a>3.2. Einmaliges Starten des Kubernetes Deployments auf Leocloud</h3>
+<div class="paragraph">
+<p>Um das Kubernetes Deployment auf Leocloud erfolgreich einzurichten, musst du das Deployment einmal manuell starten. Die GitHub Actions sind so konfiguriert, dass sie nur ein vorhandenes Deployment mit dem neuen Image neu starten. Hier sind die Schritte, um das initiale Deployment durchzuführen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Leocloud Authentifizierung</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Melde dich bei Leocloud an:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">leocloud auth login</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Maven Projekt bauen</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Baue das Projekt und bereite das Dockerfile vor:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">mvn clean package
+<span class="nb">cp </span>src/main/docker/Dockerfile target</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Docker Image erstellen</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Baue das Docker-Image und achte darauf, dass der Tag <mark>in Kleinbuchstaben</mark> geschrieben ist:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker build <span class="nt">--tag</span> ghcr.io/&lt;dein Repository&gt;:latest ./vehicle/target</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Docker Login</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Melde dich bei der GitHub Container Registry an:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker login ghcr.io</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Docker Image pushen</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Push das Docker-Image zur Registry, wobei der Tag ebenfalls <mark>in Kleinbuchstaben</mark> sein muss:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">docker push ghcr.io/&lt;dein Repository&gt;:latest</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Kubernetes Deployment anwenden</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Wende das Kubernetes Deployment an:</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">kubectl apply <span class="nt">-f</span> k8s/appsrv.yaml</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_weitere_wichtige_umgebungsvariablen_in_den_workflows"><a class="anchor" href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows"></a>4. Weitere wichtige Umgebungsvariablen in den Workflows</h2>
+<h2 id="_berechtigungen_für_die_paketverwaltung_in_github"><a class="anchor" href="#_berechtigungen_für_die_paketverwaltung_in_github"></a>4. Berechtigungen für die Paketverwaltung in GitHub</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Um ein Package in GitHub erstellen und bearbeiten zu können, muss man Mitglied einer Organisation sein. Hier sind die erforderlichen Schritte und Einstellungen:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Mitgliedschaft in der Organisation</strong>
+Stelle sicher, dass du ein Mitglied der betreffenden Organisation bist.</p>
+</li>
+<li>
+<p><strong>Öffentliche Pakete erstellen</strong>
+Um ein Package auf öffentlich zu setzen, muss in der Organisation unter <code>Settings &gt; Code, planning, and automation &gt; Packages</code> die Option zur Erstellung öffentlicher Pakete aktiviert sein.</p>
+</li>
+<li>
+<p><strong>Schreibberechtigungen</strong>
+Mitglieder benötigen Schreibberechtigungen, die unter <code>Settings &gt; Access &gt; Organization roles &gt; Role assignments</code> vergeben werden können.</p>
+</li>
+<li>
+<p><strong>Paketverwaltung aktivieren</strong>
+Wenn das Package lokal erstellt und auf öffentlich gesetzt werden kann, gehe zu dem jeweiligen Package, öffne die Package-Einstellungen und klicke unter "Manage Actions access" auf den Button "Add Repository". Füge dein Repository hinzu, damit es auf das Package zugreifen und es bearbeiten kann.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_weitere_wichtige_umgebungsvariablen_in_den_workflows"><a class="anchor" href="#_weitere_wichtige_umgebungsvariablen_in_den_workflows"></a>5. Weitere wichtige Umgebungsvariablen in den Workflows</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In den GitHub Actions Workflows (<code>build.yaml</code> und <code>release-artifacts.yaml</code>) werden verschiedene Umgebungsvariablen (<code>env</code>) verwendet, um die Pipeline-Anforderungen und die Projektkonfiguration zu steuern. Dazu gehören Variablen wie die Java-Version und die Java-Distribution, die für den Build und das Deployment festgelegt werden können. Beispiele dafür sind:</p>
@@ -722,22 +841,37 @@ Teste, ob die Verbindung zur Leocloud erfolgreich hergestellt werden kann, indem
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kubectl_config"><a class="anchor" href="#_kubectl_config"></a>5. kubectl config</h2>
+<h2 id="_github_secrets"><a class="anchor" href="#_github_secrets"></a>6. GitHub Secrets</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_zugriff_auf_die_kubernetes_konfigurationsdatei"><a class="anchor" href="#_zugriff_auf_die_kubernetes_konfigurationsdatei"></a>6.1. Zugriff auf die Kubernetes-Konfigurationsdatei</h3>
+<div class="paragraph">
+<p>Um sicherzustellen, dass der <code>deployment.yaml</code> Workflow Zugriff auf die Kubernetes-Konfigurationsdatei für Leocloud hat, musst du das folgende Kommando ausführen:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nb">cat</span> <span class="nv">$HOME</span>/.kube/config | <span class="nb">base64</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Die Ausgabe dieses Kommandos muss dann in die GitHub Actions unter dem Namen <code>KUBE_CONFIG_DATA</code> hinzugefügt werden. Dadurch kann der Workflow auf die Konfigurationsdatei zugreifen und die notwendigen Berechtigungen für die Interaktion mit Leocloud bereitstellen.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_permissions"><a class="anchor" href="#_permissions"></a>6. Permissions</h2>
+<h2 id="_abschluss"><a class="anchor" href="#_abschluss"></a>7. Abschluss</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>Nach der Durchführung aller oben genannten Schritte sollten die GitHub Actions nun ohne Probleme durchlaufen. Das Projekt ist jetzt vollständig konfiguriert und bereit für den Einsatz. Du kannst fortfahren, neue Änderungen zu implementieren und diese effizient über die GitHub Actions zu integrieren. Viel Erfolg bei der weiteren Entwicklung!</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-05 08:07:21 UTC
+Last updated 2024-11-05 08:39:23 UTC
 </div>
 </div>
 </body>
