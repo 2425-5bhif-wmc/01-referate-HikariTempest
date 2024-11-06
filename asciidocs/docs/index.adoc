@@ -77,7 +77,7 @@ image::cicd-pipeline.png[]
 
 image::criteria-catalog.png[]
 
-== GitHub Actions
+== GitHub Actions Skripte
 
 <<./github-actions-scripts.adoc#_github_actions_skripts,GitHub Actions Skripts>>
 
