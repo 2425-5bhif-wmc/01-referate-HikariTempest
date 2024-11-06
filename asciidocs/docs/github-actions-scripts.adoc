@@ -41,7 +41,6 @@ GitHub Actions ist ein CI/CD-Tool (Continuous Integration / Continuous Deploymen
 
 Ein GitHub-Action-Workflow wird durch ein Event ausgelöst und auf Runner ausgeführt. Jobs enthalten verschiedene Schritte, die entweder Aktionen oder Skripte sein können. Jeder Workflow kann flexibel konfiguriert werden, um komplexe Abläufe zu automatisieren und zu beschleunigen.
 
-
 == Grundlegender Skript Aufbau
 
 IMPORTANT: Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
@@ -191,7 +190,6 @@ Unterschiedliche Permissions sind hier zu finden: https://docs.GitHub.com/en/act
 
 == Steps
 
-
 .example.yaml
 [source,yaml]
 ----
@@ -207,6 +205,60 @@ Unterschiedliche Permissions sind hier zu finden: https://docs.GitHub.com/en/act
   run: | # multi line string operator
     mvn clean package
     dir
+----
+
+Innerhalb eines Jobs gibt es Schritte, die in der Reihenfolge ausgeführt werden, in der sie im YAML definiert sind. Ein Schritt kann eine Aktion (uses) oder ein Befehl (run) sein.
+
+
+=== Erklärung der häufigsten Schritte:
+
+==== uses
+* Dies gibt an, dass eine GitHub Action aus dem GitHub Actions Marketplace oder aus einem anderen Repository verwendet werden soll. Die Action führt eine bestimmte Aufgabe aus.
+
+.Beispiel
+[source, yaml]
+----
+- uses: actions/checkout@v4
+----
+
+* In diesem Beispiel wird die checkout-Action verwendet, um den Quellcode des Repositories herunterzuladen.
+
+==== run (Befehlsausführung)
+
+* Dieser Schritt ermöglicht es, beliebige Shell-Befehle auszuführen, z.B. zum Installieren von Abhängigkeiten oder zum Erstellen des Projekts.
+
+.Beispiel
+[source, yaml]
+----
+- run: |
+    mvn clean install
+    dir
+----
+
+    Hier wird der Maven-Befehl clean install ausgeführt, um das Projekt zu bauen.
+
+==== with (Parameter)
+
+* Viele GitHub Actions akzeptieren Parameter, die mit with angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.
+
+----
+- uses: actions/setup-java@v4
+  with:
+    java-version: 17
+----
+
+* Dieser Schritt richtet eine Java-Umgebung ein und gibt die Java-Version an.
+
+==== if (Bedingte Ausführung)
+
+* Du kannst Bedingungen definieren, um festzulegen, ob ein Schritt ausgeführt wird, basierend auf dem Status eines vorherigen Schritts oder Ereignissen im Workflow.
+
+.Beispiel
+[source, yaml]
+----
+- name: Run tests
+  if: success()
+  run: ./run-tests.sh
 ----
 
 == Umgebungsvariablen
@@ -271,7 +323,6 @@ Einige häufige Beispiele für Secrets, die in GitHub Actions verwendet werden, 
 === Einrichten von GitHub Secrets
 
 Um ein Secret in GitHub zu erstellen, gehe zu den Repository-Einstellungen und wähle die Option "Secrets". Hier kannst du neue Secrets hinzufügen, die dann in deinen Workflows verwendet werden können.
-
 
 == Concurrency
 
