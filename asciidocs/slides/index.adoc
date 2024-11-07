@@ -33,6 +33,7 @@ endif::[]
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
 
+[background-color="white"]
 == Übersicht
 
 GitHub Actions ist ein CI/CD-Tool,
@@ -50,6 +51,7 @@ image::ci-cd-cd-atlassian.png[]
 [.stretch]
 image::cicd-pipeline.png[]
 
+[background-color="white"]
 === Alternativen
 
 * Azure Pipelines
@@ -68,6 +70,7 @@ image::criteria-catalog.png[]
 
 image::https://www.plantuml.com/plantuml/png/jLBBRi8m4BpxAqQ-fuSU4KByYh4tmSMFrDu5eOf_BoQXLLHHUkd5zixEoBDZRokRmXA32jGpEAFuOSzmlf1bdvDAsH46puN6Z0y5z3uGzCkREHeDKs6l17MPU7edFZYDzLfsabWscyOOzfNAaSfD3hmB2Srdm0oK63R7qGTQOAEn1pCiCQRA2q2FKlVDjylsG0M51b-vdFMDTVaovcWC-Vp8MVVwBzwcI-7ZjKPVSdpcib3CJDqSLw1iGvOVUKwiHQOt-LYoa-dLBiesf0lTvkuVA-X4frP6pyW9qVYarRtTNQdtiUQzOTDORMdLBta_xA0hJVWy3Apc3uIJgQXYBTNQIz3g3-B9_tS2MqfEOlW4[]
 
+[background-color="white"]
 == Quellen
 
 https://2425-5bhif-wmc.github.io/01-referate-HikariTempest/index.html#_quellen
