@@ -3,12 +3,10 @@
 :email: a.schnalzenberger@HTBLALeonding.onmicrosoft.com
 :revnumber: 1.0
 :revdate: {docdate}
-:revremark: SLIDEDEMO @ HTL Leonding
 :encoding: utf-8
 :lang: de
 :doctype: article
 //:icons: font
-:customcss: css/presentation.css
 //:revealjs_customtheme: css/sky.css
 //:revealjs_customtheme: css/black.css
 :revealjs_width: 1408
@@ -33,44 +31,37 @@ endif::[]
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
 
-[background-color="white"]
 == Übersicht
 
 GitHub Actions ist ein CI/CD-Tool,
 das automatisierte Workflows direkt in GitHub ermöglicht.
 
-[background-color="white"]
 == CI/CD
 
 [.stretch]
 image::ci-cd-cd-atlassian.png[]
 
-[background-color="white"]
 === CI/CD Pipeline
 
 [.stretch]
 image::cicd-pipeline.png[]
 
-[background-color="white"]
 === Alternativen
 
 * Azure Pipelines
 * Jenkins
 * Circle CI
 
-[background-color="white"]
 === Kriterienkatalog: GitHub Actions vs. Jenkins, Azure Pipelines und CircleCI
 
 [.stretch]
 image::criteria-catalog.png[]
 
 
-[background-color="white"]
 == GitHub Actions Pipeline des Projektes
 
 image::https://www.plantuml.com/plantuml/png/jLBBRi8m4BpxAqQ-fuSU4KByYh4tmSMFrDu5eOf_BoQXLLHHUkd5zixEoBDZRokRmXA32jGpEAFuOSzmlf1bdvDAsH46puN6Z0y5z3uGzCkREHeDKs6l17MPU7edFZYDzLfsabWscyOOzfNAaSfD3hmB2Srdm0oK63R7qGTQOAEn1pCiCQRA2q2FKlVDjylsG0M51b-vdFMDTVaovcWC-Vp8MVVwBzwcI-7ZjKPVSdpcib3CJDqSLw1iGvOVUKwiHQOt-LYoa-dLBiesf0lTvkuVA-X4frP6pyW9qVYarRtTNQdtiUQzOTDORMdLBta_xA0hJVWy3Apc3uIJgQXYBTNQIz3g3-B9_tS2MqfEOlW4[]
 
-[background-color="white"]
 == Quellen
 
 https://2425-5bhif-wmc.github.io/01-referate-HikariTempest/index.html#_quellen
