@@ -16,6 +16,9 @@ ifdef::env-GitHub[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
+:toc:
+
+NOTE: In dieser Dokumentation wird der folgende CI/CD-Prozess für ein Java-Maven-Projekt als Beispiel verwendet: <<./index.adoc#_github_actions_pipeline_des_projektes,CI/CD-Pipeline Diagramm>>
 
 == Grundlegende Funktionsweise von GitHub Actions
 
@@ -32,14 +35,10 @@ GitHub Actions ist ein CI/CD-Tool (Continuous Integration / Continuous Deploymen
 3. *Jobs*:
 - Ein Workflow kann aus mehreren Jobs bestehen, die entweder parallel oder nacheinander ausgeführt werden können.
 
-4. *Schritte (Steps)*:
-- Jeder Job besteht aus mehreren Schritten.
-- Ein Schritt kann eine Aktion sein (vorgefertigte Funktionen, z.B. GitHub Actions aus dem Marketplace) oder ein Skript, das spezifische Befehle ausführt.
+4. *Steps*:
+- Jeder Job besteht aus mehreren Steps.
+- Ein Step kann eine Aktion sein (vorgefertigte Funktionen, z.B. Actions aus dem Marketplace) oder ein Skript, das spezifische Befehle ausführt.
 
-
-=== Zusammengefasst
-
-Ein GitHub-Action-Workflow wird durch ein Event ausgelöst und auf Runner ausgeführt. Jobs enthalten verschiedene Schritte, die entweder Aktionen oder Skripte sein können. Jeder Workflow kann flexibel konfiguriert werden, um komplexe Abläufe zu automatisieren und zu beschleunigen.
 
 == Grundlegender Skript Aufbau
 
@@ -63,20 +62,33 @@ jobs: #<.>
       - uses: actions/checkout@v4 #<.>
 
       - name: step 3
-        run: #bash code 3
+        run: | #<.>
+          cp ./somedir/ .
+          dir
 
 ----
 
-<.> Aktivierungkondition für diesen Worflow
+<.> Das Event, das diesen Workflow triggert.
 <.> Ein Skript besteht aus einem oder mehreren "Jobs", die Parallel, auf eigenen Umgebungen laufen.
-<.> Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04".
-<.> Aufgaben/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.
+<.> Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04". Weiter Umgebungen sind:
+* linux
+* x64
+* gpu
+* self-hosted
+** https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners[Adding self-hosted runners - GitHub Docs]
+<.> Steps sind Actions/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.
 <.> `uses`:
-* Das uses-Schlüsselwort gibt an, welche Aktion während des Workflows ausgeführt werden soll.
+* Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.
 
-* `actions/checkout@v4` bedeutet, dass der Workflow die Action `checkout` aus dem actions-Repository verwendet. Insbesondere Version 4 dieser Aktion.
+* Das Format von uses ist owner/repo@version.
 
-* Dadurch kann der Workflow auf den Code und die Dateien des Repositorys zugreifen.
+* Weitere Informationen und Beispiele befinden sich im Kapitel: <<_uses,Uses>>
+
+<.> Hier wird `run: |` verwendet, wodurch jede Zeile als separater Befehl in der Shell-Konsole behandelt wird.
+
+* Weitere Informationen befinden sich im Kapitel:  <<_run_befehlsausführung,Run>>
+
+IMPORTANT: Die Workflow-Dateien im Format `.yaml` müssen im Verzeichnis `.github/workflows` des Repositories abgelegt sein.
 
 == Events
 
@@ -110,16 +122,20 @@ jobs:
 
 ----
 
-<.> Aktiviert bei einem "git push"
+<.> Löst den Workflow bei einem git push-Ereignis aus.
 <.> Spezifiziert, dass es nur ausgeführt wird, wenn sich etwas in den angegebenen Pfaden verändert hat.
-<.> Nur wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.
-<.> Wenn eine Pull-Request ausgeführt wird.
-<.> Wenn ein anderer Workflow ausgeführt wird.
-<.> Der Name des Workflows, der ganz oben in dessen Skript angegeben wurde.
-<.> Nur wenn der Workflow fertig (`completed`) ist.
-<.> Es taucht in GitHub bei der Action ein button auf, wodurch man diesen Workflow manuell starten kann.
+<.> Spezifiziert, dass es nur ausgeführt wird, wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.
+<.> Löst den Workflow aus, wenn ein Pull-Request Ereignis auftritt.
+* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request[Pull Request Events - GitHub Actions Docs]
+* Beispiele:
+** `types: [opened, reopened]`
+<.> Löst den Workflow aus, wenn ein Workflow-Ereignis, bei einem angegebenen Workflow, auftritt.
+* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run[Pull Request Events - GitHub Actions Docs]
+<.> Der Name des Workflows, dessen Ereignisse überwacht werden. Dieser Name entspricht dem Wert, der im oberen Abschnitt des Skripts mit dem Schlüssel `name:` festgelegt wurde.
+<.> Es wird ausschließlich auf das Ereignis `completed` gewartet, d.h. der Workflow wird nur fortgesetzt, wenn der andere Workflow abgeschlossen ist.
+<.> Dies ermöglicht das manuelle Auslösen eines GitHub Workflows über die GitHub-Benutzeroberfläche.
 
-.GitHub Screenshot `worflow_dispatch`
+.Screenshot der GitHub-Benutzeroberfläche zum manuellen Starten des Workflows
 [%collapsible%]
 ====
 image::github-screenshot-workflow-dispatch.png[]
@@ -130,12 +146,14 @@ image::github-screenshot-workflow-dispatch.png[]
 .example.yaml
 [source,yaml]
 ----
+...
+
 jobs:
   job-1:
     name: job 1
     runs-on: ubuntu-24.04
     permissions: #<.>
-      packages: write #<.>
+      packages: write
     env: #<.>
       JAVA_VERSION: '21'
       JAVA_DISTRIBUTION: 'temurin'
@@ -152,47 +170,49 @@ jobs:
     steps:
       ...
 ----
-<.> GitHub Actions besitzen secrets, welche einem wie eine environment Variable zur Verfügung gestellt werden (später mehr dazu).
-<.> Hierbei handelt es sich zum Beispiel um die "packages" Berechtigung, wobei wir hiermit dem "Job erlauben" ein GitHub-Package zu erstellen und zu bearbeiten.
-<.> Hierbei kann man die Environment Variablen des Jobs festlegen, die man später so verwenden kann: `${{ env.<Environment Variablen Name> }}`
-<.> Eine GitHub Action kann mehrere Jobs haben, die parallel laufen.
+<.> Mehr dazu im Kapitel: <<_permissions,Permissions>>
+<.> Mehr dazu im Kapitel: <<_umgebungsvariablen,Umgebungsvariablen>>
+<.> Eine GitHub Action kann mehrere Jobs enthalten, die parallel ausgeführt werden.
 <.> Wenn eine GitHub Action durch das `workflow_run` Event gestartet wird, kann man mithilfe dieser If-Bedingung festlegen, unter welchen Bedingungen er starten soll.
 * Hierbei startet es, wenn eine von zwei Bedingungen erfüllt ist:
-** Entweder wird er durch `workflow_dispatch` automatisch gestartet
+** Entweder wird er durch `workflow_dispatch` automatisch gestartet.
 ** Oder der vorherige Workflow wurde fehlerfrei abgeschlossen.
 
+[#_github_token]
 === GitHub Token
 
-Das GitHub_TOKEN ist ein temporäres Authentifizierungstoken, das in GitHub Actions verwendet wird, um auf das Repository und GitHub-APIs zuzugreifen. Es ermöglicht das Durchführen von Aktionen wie Code-Pushes oder Release-Verwaltung. Die Berechtigungen des Tokens können angepasst werden, um nur den minimal erforderlichen Zugriff zu gewähren.
+Das GitHub_TOKEN ist ein temporäres Authentifizierungstoken, das in GitHub Actions verwendet wird, um auf das Repository und GitHub-APIs zuzugreifen.Es ermöglicht das Durchführen von Aktionen wie Code-Pushes oder Release-Verwaltung, welche Berechtigungen benötigen.Die Berechtigungen des Tokens müssen angepasst werden, um nur den minimal erforderlichen Zugriff zu gewähren.
 
+[#_permissions]
 === Permissions
 
 Sie können die Berechtigungen anpassen, die dem GitHub_TOKEN standardmäßig zugewiesen sind, um nur den minimal erforderlichen Zugriff zu gewähren, indem Sie Zugriffe hinzufügen oder entfernen.
 
-Unterschiedliche Permissions sind hier zu finden: https://docs.GitHub.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-GitHub_token[GitHub Actions Documentation]
-
 ==== Es gibt mehrere Berechtigungsstufen für jede Ressource:
 
-* *read*: Zugriff nur zum Lesen. Der Workflow kann Daten aus der Ressource abrufen, aber keine Änderungen vornehmen.
+* *read*: Zugriff nur zum Lesen.Der Workflow kann Daten aus der Ressource abrufen, aber keine Änderungen vornehmen.
 * *write*: Erlaubt dem Workflow, Änderungen an der Ressource vorzunehmen (z. B. Pushen von Paketen oder Ändern von Repositories).
 * *none*: Entzieht dem Workflow die Berechtigung für die Ressource.
 
-==== Warum permissions nutzen?
+==== Beispiele
 
-* *Sicherheit*: Mit permissions kannst du den Zugriff auf das Notwendigste beschränken. Standardmäßig haben GitHub Actions je nach Repository und Workflow Setup unterschiedliche Zugriffsebenen.
-* *Transparenz und Kontrolle*: Entwickler und Reviewer sehen klar, welche Ressourcen ein Workflow verwenden darf.
+* `actions`
+** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Actions zu arbeiten. Zum Beispiel erlaubt die `actions:write` einer Action, einen Workflow-Run abzubrechen.
+* `contents`
+** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit dem Inhalt des Repositories zu arbeiten. Zum Beispiel erlaubt `contents: read` einer Action, die Commits aufzulisten, und `contents: write` ermöglicht es der Action, einen Release zu erstellen.
+* `packages`
+** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Packages zu arbeiten. Zum Beispiel erlaubt `packages: write` einer Action, Pakete auf GitHub Packages hochzuladen und zu veröffentlichen.
+* `pages`
+** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Pages zu arbeiten. Zum Beispiel erlaubt `pages: write` einer Action, einen Build für GitHub Pages anzufordern.
 
-==== Empfohlene Praktiken
-
-* Setze nur die Berechtigungen, die der Workflow wirklich benötigt.
-* Falls ein Job nur lesenden Zugriff benötigt, verwende read anstatt write.
-* Verwende none, um sicherzustellen, dass der Job gar keinen Zugriff auf bestimmte Ressourcen hat.
+Alle Berechtigungen sind hier zu finden: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token[GitHub Token Berechtigungen - GitHub Docs]
 
 == Steps
 
 .example.yaml
 [source,yaml]
 ----
+...
 - uses: actions/checkout@v4
 
 - uses: actions/setup-java@v4
@@ -205,41 +225,54 @@ Unterschiedliche Permissions sind hier zu finden: https://docs.GitHub.com/en/act
   run: | # multi line string operator
     mvn clean package
     dir
+...
 ----
 
-Innerhalb eines Jobs gibt es Schritte, die in der Reihenfolge ausgeführt werden, in der sie im YAML definiert sind. Ein Schritt kann eine Aktion (uses) oder ein Befehl (run) sein.
+Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, in der sie im YAML definiert sind. Ein Step kann eine Action (uses) oder ein Befehl (run) sein.
 
 
 === Erklärung der häufigsten Schritte:
 
+[#_uses]
 ==== uses
-* Dies gibt an, dass eine GitHub Action aus dem GitHub Actions Marketplace oder aus einem anderen Repository verwendet werden soll. Die Action führt eine bestimmte Aufgabe aus.
+* Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.
+
+* Das Format von uses ist owner/repo@version.
 
 .Beispiel
-[source, yaml]
+[source,yaml]
 ----
 - uses: actions/checkout@v4
 ----
 
-* In diesem Beispiel wird die checkout-Action verwendet, um den Quellcode des Repositories herunterzuladen.
+* https://github.com/marketplace/actions/checkout[Checkout:]
+** Diese Aktion führt ein Checkout Ihres Repositories im Verzeichnis `$GITHUB_WORKSPACE` durch, sodass Ihr Workflow darauf zugreifen kann.
+** Standardmäßig wird nur ein einzelner Commit abgerufen, der dem Ref/SHA entspricht, der den Workflow ausgelöst hat. Um die gesamte Historie aller Branches und Tags abzurufen, setzen Sie `fetch-depth: 0`.
+*** In GitHub Actions repräsentiert `github.ref` den Git-Referenznamen (z. B. einen Branch oder Tag), der das aktuelle Ereignis ausgelöst hat. Zum Beispiel kann dies ein Branch wie `refs/heads/main` oder ein Tag wie `refs/tags/v1.0` sein.
+*** `github.sha` ist der Hash-Wert des Commits, der das Ereignis ausgelöst hat. Es handelt sich dabei um eine eindeutige Kennung des spezifischen Commits im Repository, der den Workflow gestartet hat.
 
+[#_run_befehlsausführung]
 ==== run (Befehlsausführung)
 
-* Dieser Schritt ermöglicht es, beliebige Shell-Befehle auszuführen, z.B. zum Installieren von Abhängigkeiten oder zum Erstellen des Projekts.
+* Dies ermöglicht es, beliebige Shell-Befehle auszuführen, z.B. zum Installieren von Abhängigkeiten oder zum Erstellen des Projekts.
 
-.Beispiel
-[source, yaml]
+[source,yaml]
 ----
 - run: |
-    mvn clean install
+    mvn clean package
     dir
 ----
 
-    Hier wird der Maven-Befehl clean install ausgeführt, um das Projekt zu bauen.
+    Hier wird der Maven-Befehl clean package ausgeführt, um das Projekt zu bauen und schließlich wird der Inhalt des aktuellen Verzeichnisses aufgelistet.
+
+* `run: |` wird verwendet, damit jede Zeile als separater Befehl in der Shell-Konsole behandelt wird.
+* Unterschiede:
+** `run: ...` führt einen einzelnen Befehl aus.
+** `run: | ...` wird verwendet, um mehrere Befehle als zusammenhängendes Skript auszuführen, wobei jede Zeile als separater Befehl behandelt wird.
 
 ==== with (Parameter)
 
-* Viele GitHub Actions akzeptieren Parameter, die mit with angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.
+* Viele GitHub Actions akzeptieren Parameter, die mit `with` angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.
 
 ----
 - uses: actions/setup-java@v4
@@ -247,58 +280,70 @@ Innerhalb eines Jobs gibt es Schritte, die in der Reihenfolge ausgeführt werden
     java-version: 17
 ----
 
-* Dieser Schritt richtet eine Java-Umgebung ein und gibt die Java-Version an.
+* Dieser Schritt richtet eine Java-Umgebung mit der Java-Version 17 ein.
 
 ==== if (Bedingte Ausführung)
 
 * Du kannst Bedingungen definieren, um festzulegen, ob ein Schritt ausgeführt wird, basierend auf dem Status eines vorherigen Schritts oder Ereignissen im Workflow.
 
-.Beispiel
-[source, yaml]
+[source,yaml]
 ----
 - name: Run tests
   if: success()
   run: ./run-tests.sh
 ----
 
+[#_umgebungsvariablen]
 == Umgebungsvariablen
 
-GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat. Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.
+GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat.Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.
+
+* Umgebungsvariablen werden von Betriebssystemen oder Programmen verwendet, um Konfigurationen, Pfade oder andere Einstellungen bereitzustellen, die für die Ausführung von Programmen erforderlich sind.
+* Umgebungsvariablen können systemweit oder benutzerspezifisch definiert werden und bieten eine flexible Möglichkeit, Werte wie Datenbankverbindungen, API-Schlüssel oder Verzeichnispfade zu verwalten.
+
+=== Verwendung
+
+Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: `${{ <quelle>.<variablenname> }}`.
 
 .Beispiel
-[source, yaml]
+[source,yaml]
 ----
-- name: Echo github repo
-  run: echo ${{ github.GITHUB_REPOSITORY }}
+- name: Echo env
+  run: echo ${{ env.JAVA_VERSION }}
 ----
 
 === Wichtige vorgegebene GitHub-Umgebungsvariablen
 
-* **`GITHUB_REPOSITORY`**
-Diese Variable enthält den Namen des GitHub-Repositories im Format `owner/repository`. Sie gibt an, auf welchem Repository der Workflow ausgeführt wird.
+* *`github.repository`*
+Diese Variable enthält den Namen des GitHub-Repositories, auf dem der Workflow ausgeführt wird, im Format `owner/repository`.
 
-* **`GITHUB_SHA`**
-Diese Variable enthält den vollständigen Commit-Hash des aktuellen Runs. Sie wird häufig verwendet, um eine Version des Deployments oder der Build-Dateien zu kennzeichnen.
+* *`github.sha`*
+Diese Variable enthält den vollständigen Commit-Hash des aktuellen Runs.
 
-* **`GITHUB_EVENT_NAME`**
+* *`github.event_name`*
 Diese Variable zeigt den Namen des Ereignisses, das den Workflow ausgelöst hat, wie z.B. `push`, `pull_request` oder `workflow_dispatch`.
 
-* **`GITHUB_ACTOR`**
-Diese Variable enthält den Benutzernamen des GitHub-Benutzers, der den Workflow ausgelöst hat. Sie ist nützlich, um zu wissen, wer Änderungen am Repository vorgenommen hat.
+* *`github.actor`*
+Diese Variable enthält den Benutzernamen des GitHub-Benutzers, der den Workflow ausgelöst hat.
 
-* **`GITHUB_AUTHOR`**
-Diese Variable gibt den Benutzernamen des Autors des letzten Commits im Repository an. Dies hilft dabei, den Ursprung von Änderungen nachzuvollziehen.
+* *`github.workflow`*
+Diese Variable enthält den Namen des aktuellen Workflows, der ausgeführt wird.
 
-* **`GITHUB_WORKFLOW`**
-Diese Variable enthält den Namen des aktuellen Workflows, der ausgeführt wird. Sie wird genutzt, um zu wissen, welcher Workflow gerade aktiv ist.
+* *`github.run_id`*
+Diese Variable enthält die eindeutige ID des aktuellen Workflow-Runs.
 
-* **`GITHUB_RUN_ID`**
-Diese Variable enthält die eindeutige ID des aktuellen Workflow-Runs. Sie wird oft für Logging-Zwecke oder für die Verknüpfung von Ausgaben verwendet.
+* *`github.ref`*
+Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den Workflow ausgelöst hat.
 
-* **`GITHUB_REF`**
-Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den Workflow ausgelöst hat. Sie hilft dabei, zu bestimmen, auf welchem Branch oder Tag der Workflow läuft.
+.Screenshot mit Beispielen für mögliche Werte der Variablen
+[%collapsible%]
+====
+image::github-screenshot-logged-environment-variables.png[]
+====
 
 Diese Umgebungsvariablen bieten eine einfache Möglichkeit, Kontextinformationen über den Workflow und das Repository zu erhalten, die dann in verschiedenen Workflow-Schritten weiterverwendet werden können. Sie sind besonders nützlich für Automatisierungsaufgaben wie Deployments, Tests und Benachrichtigungen.
+
+Weitere Umgebungsvariablen: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context[Github Context - GitHub Docs]
 
 == GitHub Secrets
 
@@ -315,10 +360,13 @@ GitHub Secrets sind sichere Umgebungsvariablen, die in GitHub Actions verwendet 
 
 Einige häufige Beispiele für Secrets, die in GitHub Actions verwendet werden, sind:
 
-* **API-Schlüssel** für externe Dienste
-* **Zugangstokens** für GitHub oder andere Systeme
-* **Datenbankpasswörter**
-* **SSH-Schlüssel** für den Zugriff auf Server
+* *API-Schlüssel* für externe Dienste
+* *Zugangstokens* für GitHub oder andere Systeme
+* *Datenbankpasswörter*
+* *SSH-Schlüssel* für den Zugriff auf Server
+* *secrets.GITHUB_TOKEN*: <<_github_token, GitHub Token Kapitel>>
+
+Weitere Secrets: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#secrets-context[Secrets Context - GitHub Docs]
 
 === Einrichten von GitHub Secrets
 

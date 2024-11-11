@@ -29,10 +29,11 @@ Dieses Projekt wurde im Rahmen einer Präsentation über GitHub Actions entwicke
 * Build
 ** Dieses Skript erstellt ein Docker-Image aus einem kleinen Maven-Java-Projekt und pusht das fertige Image in die Container Registry "ghcr.io".
 * Deploy
-** Hier wird das zuvor erstellte Image in einer Kubernetes-Umgebung aktualisiert. Die Bereitstellung erfolgt mittels `kubectl` und einer in den GitHub Secrets gespeicherten `kubectl`-Konfigurationsdatei.
+** Hier wird das zuvor erstellte Image in einer Kubernetes-Umgebung aktualisiert.Die Bereitstellung erfolgt mittels `kubectl` und einer in den GitHub Secrets gespeicherten `kubectl`-Konfigurationsdatei.
 * Release Artifacts
-** Dieses Skript erstellt ein Prerelease auf GitHub. Dabei werden alle Commits seit dem letzten Release zusammengefasst und mit den Commit-Nachrichten sowie dem `.jar`-Artefakt der Maven-Java-Anwendung veröffentlicht.
+** Dieses Skript erstellt ein Prerelease auf GitHub.Dabei werden alle Commits seit dem letzten Release zusammengefasst und mit den Commit-Nachrichten sowie dem `.jar`-Artefakt der Maven-Java-Anwendung veröffentlicht.
 
+[#_github_actions_pipeline_des_projektes]
 === GitHub Actions Pipeline des Projektes
 
 image::https://www.plantuml.com/plantuml/png/jLBBRi8m4BpxAqQ-fuSU4KByYh4tmSMFrDu5eOf_BoQXLLHHUkd5zixEoBDZRokRmXA32jGpEAFuOSzmlf1bdvDAsH46puN6Z0y5z3uGzCkREHeDKs6l17MPU7edFZYDzLfsabWscyOOzfNAaSfD3hmB2Srdm0oK63R7qGTQOAEn1pCiCQRA2q2FKlVDjylsG0M51b-vdFMDTVaovcWC-Vp8MVVwBzwcI-7ZjKPVSdpcib3CJDqSLw1iGvOVUKwiHQOt-LYoa-dLBiesf0lTvkuVA-X4frP6pyW9qVYarRtTNQdtiUQzOTDORMdLBta_xA0hJVWy3Apc3uIJgQXYBTNQIz3g3-B9_tS2MqfEOlW4[]
