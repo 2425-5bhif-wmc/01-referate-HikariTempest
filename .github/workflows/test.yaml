@@ -13,18 +13,18 @@ jobs:
 
     steps:
       - name: github repository
-        run: echo $GITHUB_REPOSITORY
+        run: echo ${{ github.GITHUB_REPOSITORY }}
       - name: github sha
-        run: echo $GITHUB_SHA
+        run: echo ${{ github.GITHUB_SHA }}
       - name: github event name
-        run: echo $github.GITHUB_EVENT_NAME
+        run: echo ${{ github.GITHUB_EVENT_NAME }}
       - name: github actor
-        run: echo $github.GITHUB_ACTOR
+        run: echo ${{ github.GITHUB_ACTOR }}
       - name: github author
-        run: echo $github.GITHUB_AUTHOR
+        run: echo ${{ github.GITHUB_AUTHOR }}
       - name: github workflow
-        run: echo $github.GITHUB_WORKFLOW
+        run: echo ${{ github.GITHUB_WORKFLOW }}
       - name: github run id
-        run: echo $github.GITHUB_RUN_ID
+        run: echo ${{ github.GITHUB_RUN_ID }}
       - name: github ref
-        run: echo $github.GITHUB_REF
+        run: echo ${{ github.GITHUB_REF }}
