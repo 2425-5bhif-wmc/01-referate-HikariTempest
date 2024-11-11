@@ -565,7 +565,7 @@ pre.rouge .gs {
 <div class="details">
 <span id="author" class="author">Arwed Schnalzenberger</span><br>
 <span id="revnumber">version 1.0.0,</span>
-<span id="revdate">2024-11-07</span>
+<span id="revdate">2024-11-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -573,7 +573,6 @@ pre.rouge .gs {
 <li><a href="#_grundlegende_funktionsweise_von_github_actions">1. Grundlegende Funktionsweise von GitHub Actions</a>
 <ul class="sectlevel2">
 <li><a href="#_ablauf">1.1. Ablauf</a></li>
-<li><a href="#_zusammengefasst">1.2. Zusammengefasst</a></li>
 </ul>
 </li>
 <li><a href="#_grundlegender_skript_aufbau">2. Grundlegender Skript Aufbau</a></li>
@@ -591,7 +590,8 @@ pre.rouge .gs {
 </li>
 <li><a href="#_umgebungsvariablen">6. Umgebungsvariablen</a>
 <ul class="sectlevel2">
-<li><a href="#_wichtige_vorgegebene_github_umgebungsvariablen">6.1. Wichtige vorgegebene GitHub-Umgebungsvariablen</a></li>
+<li><a href="#_verwendung">6.1. Verwendung</a></li>
+<li><a href="#_wichtige_vorgegebene_github_umgebungsvariablen">6.2. Wichtige vorgegebene GitHub-Umgebungsvariablen</a></li>
 </ul>
 </li>
 <li><a href="#_github_secrets">7. GitHub Secrets</a>
@@ -609,6 +609,22 @@ pre.rouge .gs {
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In dieser Dokumentation wird der folgende CI/CD-Prozess für ein Java-Maven-Projekt als Beispiel verwendet: <a href="./index.html#_github_actions_pipeline_des_projektes">CI/CD-Pipeline Diagramm</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_grundlegende_funktionsweise_von_github_actions"><a class="anchor" href="#_grundlegende_funktionsweise_von_github_actions"></a>1. Grundlegende Funktionsweise von GitHub Actions</h2>
 <div class="sectionbody">
@@ -641,25 +657,19 @@ pre.rouge .gs {
 </div>
 </li>
 <li>
-<p><strong>Schritte (Steps)</strong>:</p>
+<p><strong>Steps</strong>:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Jeder Job besteht aus mehreren Schritten.</p>
+<p>Jeder Job besteht aus mehreren Steps.</p>
 </li>
 <li>
-<p>Ein Schritt kann eine Aktion sein (vorgefertigte Funktionen, z.B. GitHub Actions aus dem Marketplace) oder ein Skript, das spezifische Befehle ausführt.</p>
+<p>Ein Step kann eine Aktion sein (vorgefertigte Funktionen, z.B. Actions aus dem Marketplace) oder ein Skript, das spezifische Befehle ausführt.</p>
 </li>
 </ul>
 </div>
 </li>
 </ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_zusammengefasst"><a class="anchor" href="#_zusammengefasst"></a>1.2. Zusammengefasst</h3>
-<div class="paragraph">
-<p>Ein GitHub-Action-Workflow wird durch ein Event ausgelöst und auf Runner ausgeführt. Jobs enthalten verschiedene Schritte, die entweder Aktionen oder Skripte sein können. Jeder Workflow kann flexibel konfiguriert werden, um komplexe Abläufe zu automatisieren und zu beschleunigen.</p>
 </div>
 </div>
 </div>
@@ -697,14 +707,16 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
       <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span> <i class="conum" data-value="5"></i><b>(5)</b>
 
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">step </span><span class="m">3</span>
-        <span class="na">run</span><span class="pi">:</span> <span class="c1">#bash code 3</span></code></pre>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span> <i class="conum" data-value="6"></i><b>(6)</b>
+          <span class="s">cp ./somedir/ .</span>
+          <span class="s">dir</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Aktivierungkondition für diesen Worflow</td>
+<td>Das Event, das diesen Workflow triggert.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -712,11 +724,34 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04".</td>
+<td>Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04". Weiter Umgebungen sind:
+<div class="ulist">
+<ul>
+<li>
+<p>linux</p>
+</li>
+<li>
+<p>x64</p>
+</li>
+<li>
+<p>gpu</p>
+</li>
+<li>
+<p>self-hosted</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners">Adding self-hosted runners - GitHub Docs</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Aufgaben/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.</td>
+<td>Steps sind Actions/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
@@ -724,16 +759,39 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Das uses-Schlüsselwort gibt an, welche Aktion während des Workflows ausgeführt werden soll.</p>
+<p>Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.</p>
 </li>
 <li>
-<p><code>actions/checkout@v4</code> bedeutet, dass der Workflow die Action <code>checkout</code> aus dem actions-Repository verwendet. Insbesondere Version 4 dieser Aktion.</p>
+<p>Das Format von uses ist owner/repo@version.</p>
 </li>
 <li>
-<p>Dadurch kann der Workflow auf den Code und die Dateien des Repositorys zugreifen.</p>
+<p>Weitere Informationen und Beispiele befinden sich im Kapitel: <a href="#_uses">Uses</a></p>
 </li>
 </ul>
 </div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Hier wird <code>run: |</code> verwendet, wodurch jede Zeile als separater Befehl in der Shell-Konsole behandelt wird.
+<div class="ulist">
+<ul>
+<li>
+<p>Weitere Informationen befinden sich im Kapitel:  <a href="#_run_befehlsausführung">Run</a></p>
+</li>
+</ul>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.github/workflows</code> des Repositories abgelegt sein.
+</td>
 </tr>
 </table>
 </div>
@@ -776,7 +834,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Aktiviert bei einem "git push"</td>
+<td>Löst den Workflow bei einem git push-Ereignis aus.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -784,32 +842,56 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Nur wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.</td>
+<td>Spezifiziert, dass es nur ausgeführt wird, wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Wenn eine Pull-Request ausgeführt wird.</td>
+<td>Löst den Workflow aus, wenn ein Pull-Request Ereignis auftritt.
+<div class="ulist">
+<ul>
+<li>
+<p>Weitere Informationen: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request">Pull Request Events - GitHub Actions Docs</a></p>
+</li>
+<li>
+<p>Beispiele:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>types: [opened, reopened]</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Wenn ein anderer Workflow ausgeführt wird.</td>
+<td>Löst den Workflow aus, wenn ein Workflow-Ereignis, bei einem angegebenen Workflow, auftritt.
+<div class="ulist">
+<ul>
+<li>
+<p>Weitere Informationen: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run">Pull Request Events - GitHub Actions Docs</a></p>
+</li>
+</ul>
+</div></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Der Name des Workflows, der ganz oben in dessen Skript angegeben wurde.</td>
+<td>Der Name des Workflows, dessen Ereignisse überwacht werden. Dieser Name entspricht dem Wert, der im oberen Abschnitt des Skripts mit dem Schlüssel <code>name:</code> festgelegt wurde.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Nur wenn der Workflow fertig (<code>completed</code>) ist.</td>
+<td>Es wird ausschließlich auf das Ereignis <code>completed</code> gewartet, d.h. der Workflow wird nur fortgesetzt, wenn der andere Workflow abgeschlossen ist.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Es taucht in GitHub bei der Action ein button auf, wodurch man diesen Workflow manuell starten kann.</td>
+<td>Dies ermöglicht das manuelle Auslösen eines GitHub Workflows über die GitHub-Benutzeroberfläche.</td>
 </tr>
 </table>
 </div>
 <details>
-<summary class="title">GitHub Screenshot <code>worflow_dispatch</code></summary>
+<summary class="title">Screenshot der GitHub-Benutzeroberfläche zum manuellen Starten des Workflows</summary>
 <div class="content">
 <div class="imageblock">
 <div class="content">
@@ -826,25 +908,27 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="listingblock">
 <div class="title">example.yaml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="na">jobs</span><span class="pi">:</span>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="nn">...</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
   <span class="na">job-1</span><span class="pi">:</span>
     <span class="na">name</span><span class="pi">:</span> <span class="s">job </span><span class="m">1</span>
     <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-24.04</span>
     <span class="na">permissions</span><span class="pi">:</span> <i class="conum" data-value="1"></i><b>(1)</b>
-      <span class="na">packages</span><span class="pi">:</span> <span class="s">write</span> <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="na">env</span><span class="pi">:</span> <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="na">packages</span><span class="pi">:</span> <span class="s">write</span>
+    <span class="na">env</span><span class="pi">:</span> <i class="conum" data-value="2"></i><b>(2)</b>
       <span class="na">JAVA_VERSION</span><span class="pi">:</span> <span class="s1">'</span><span class="s">21'</span>
       <span class="na">JAVA_DISTRIBUTION</span><span class="pi">:</span> <span class="s1">'</span><span class="s">temurin'</span>
 
     <span class="na">steps</span><span class="pi">:</span>
       <span class="s">...</span>
-  <span class="na">job-2</span><span class="pi">:</span> <i class="conum" data-value="4"></i><b>(4)</b>
+  <span class="na">job-2</span><span class="pi">:</span> <i class="conum" data-value="3"></i><b>(3)</b>
     <span class="na">name</span><span class="pi">:</span> <span class="s">job </span><span class="m">2</span>
     <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-24.04</span>
     <span class="na">env</span><span class="pi">:</span>
       <span class="na">K8S_DEPLOYMENT_NAME</span><span class="pi">:</span> <span class="s1">'</span><span class="s">appsrv'</span>
 
-    <span class="na">if</span><span class="pi">:</span> <span class="s">${{ GitHub.event_name == 'workflow_dispatch' || GitHub.event.workflow_run.conclusion == 'success' }}</span> <i class="conum" data-value="5"></i><b>(5)</b>
+    <span class="na">if</span><span class="pi">:</span> <span class="s">${{ GitHub.event_name == 'workflow_dispatch' || GitHub.event.workflow_run.conclusion == 'success' }}</span> <i class="conum" data-value="4"></i><b>(4)</b>
     <span class="na">steps</span><span class="pi">:</span>
       <span class="s">...</span></code></pre>
 </div>
@@ -853,22 +937,18 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>GitHub Actions besitzen secrets, welche einem wie eine environment Variable zur Verfügung gestellt werden (später mehr dazu).</td>
+<td>Mehr dazu im Kapitel: <a href="#_permissions">Permissions</a></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Hierbei handelt es sich zum Beispiel um die "packages" Berechtigung, wobei wir hiermit dem "Job erlauben" ein GitHub-Package zu erstellen und zu bearbeiten.</td>
+<td>Mehr dazu im Kapitel: <a href="#_umgebungsvariablen">Umgebungsvariablen</a></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Hierbei kann man die Environment Variablen des Jobs festlegen, die man später so verwenden kann: <code>${{ env.&lt;Environment Variablen Name&gt; }}</code></td>
+<td>Eine GitHub Action kann mehrere Jobs enthalten, die parallel ausgeführt werden.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Eine GitHub Action kann mehrere Jobs haben, die parallel laufen.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>Wenn eine GitHub Action durch das <code>workflow_run</code> Event gestartet wird, kann man mithilfe dieser If-Bedingung festlegen, unter welchen Bedingungen er starten soll.
 <div class="ulist">
 <ul>
@@ -877,7 +957,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Entweder wird er durch <code>workflow_dispatch</code> automatisch gestartet</p>
+<p>Entweder wird er durch <code>workflow_dispatch</code> automatisch gestartet.</p>
 </li>
 <li>
 <p>Oder der vorherige Workflow wurde fehlerfrei abgeschlossen.</p>
@@ -893,7 +973,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="sect2">
 <h3 id="_github_token"><a class="anchor" href="#_github_token"></a>4.1. GitHub Token</h3>
 <div class="paragraph">
-<p>Das GitHub_TOKEN ist ein temporäres Authentifizierungstoken, das in GitHub Actions verwendet wird, um auf das Repository und GitHub-APIs zuzugreifen. Es ermöglicht das Durchführen von Aktionen wie Code-Pushes oder Release-Verwaltung. Die Berechtigungen des Tokens können angepasst werden, um nur den minimal erforderlichen Zugriff zu gewähren.</p>
+<p>Das GitHub_TOKEN ist ein temporäres Authentifizierungstoken, das in GitHub Actions verwendet wird, um auf das Repository und GitHub-APIs zuzugreifen.Es ermöglicht das Durchführen von Aktionen wie Code-Pushes oder Release-Verwaltung, welche Berechtigungen benötigen.Die Berechtigungen des Tokens müssen angepasst werden, um nur den minimal erforderlichen Zugriff zu gewähren.</p>
 </div>
 </div>
 <div class="sect2">
@@ -901,15 +981,12 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="paragraph">
 <p>Sie können die Berechtigungen anpassen, die dem GitHub_TOKEN standardmäßig zugewiesen sind, um nur den minimal erforderlichen Zugriff zu gewähren, indem Sie Zugriffe hinzufügen oder entfernen.</p>
 </div>
-<div class="paragraph">
-<p>Unterschiedliche Permissions sind hier zu finden: <a href="https://docs.GitHub.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-GitHub_token">GitHub Actions Documentation</a></p>
-</div>
 <div class="sect3">
 <h4 id="_es_gibt_mehrere_berechtigungsstufen_für_jede_ressource"><a class="anchor" href="#_es_gibt_mehrere_berechtigungsstufen_für_jede_ressource"></a>4.2.1. Es gibt mehrere Berechtigungsstufen für jede Ressource:</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>read</strong>: Zugriff nur zum Lesen. Der Workflow kann Daten aus der Ressource abrufen, aber keine Änderungen vornehmen.</p>
+<p><strong>read</strong>: Zugriff nur zum Lesen.Der Workflow kann Daten aus der Ressource abrufen, aber keine Änderungen vornehmen.</p>
 </li>
 <li>
 <p><strong>write</strong>: Erlaubt dem Workflow, Änderungen an der Ressource vorzunehmen (z. B. Pushen von Paketen oder Ändern von Repositories).</p>
@@ -921,32 +998,53 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 </div>
 </div>
 <div class="sect3">
-<h4 id="_warum_permissions_nutzen"><a class="anchor" href="#_warum_permissions_nutzen"></a>4.2.2. Warum permissions nutzen?</h4>
+<h4 id="_beispiele"><a class="anchor" href="#_beispiele"></a>4.2.2. Beispiele</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Sicherheit</strong>: Mit permissions kannst du den Zugriff auf das Notwendigste beschränken. Standardmäßig haben GitHub Actions je nach Repository und Workflow Setup unterschiedliche Zugriffsebenen.</p>
-</li>
-<li>
-<p><strong>Transparenz und Kontrolle</strong>: Entwickler und Reviewer sehen klar, welche Ressourcen ein Workflow verwenden darf.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_empfohlene_praktiken"><a class="anchor" href="#_empfohlene_praktiken"></a>4.2.3. Empfohlene Praktiken</h4>
+<p><code>actions</code></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Setze nur die Berechtigungen, die der Workflow wirklich benötigt.</p>
-</li>
-<li>
-<p>Falls ein Job nur lesenden Zugriff benötigt, verwende read anstatt write.</p>
-</li>
-<li>
-<p>Verwende none, um sicherzustellen, dass der Job gar keinen Zugriff auf bestimmte Ressourcen hat.</p>
+<p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Actions zu arbeiten. Zum Beispiel erlaubt die <code>actions:write</code> einer Action, einen Workflow-Run abzubrechen.</p>
 </li>
 </ul>
+</div>
+</li>
+<li>
+<p><code>contents</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit dem Inhalt des Repositories zu arbeiten. Zum Beispiel erlaubt <code>contents: read</code> einer Action, die Commits aufzulisten, und <code>contents: write</code> ermöglicht es der Action, einen Release zu erstellen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>packages</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Packages zu arbeiten. Zum Beispiel erlaubt <code>packages: write</code> einer Action, Pakete auf GitHub Packages hochzuladen und zu veröffentlichen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>pages</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Pages zu arbeiten. Zum Beispiel erlaubt <code>pages: write</code> einer Action, einen Build für GitHub Pages anzufordern.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Alle Berechtigungen sind hier zu finden: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token">GitHub Token Berechtigungen - GitHub Docs</a></p>
 </div>
 </div>
 </div>
@@ -958,7 +1056,8 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="listingblock">
 <div class="title">example.yaml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="nn">...</span>
+<span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
 
 <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-java@v4</span>
   <span class="na">with</span><span class="pi">:</span>
@@ -969,11 +1068,12 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
   <span class="na">working-directory</span><span class="pi">:</span> <span class="s">${{ env.PROJECT_LOCATION }}</span>
   <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span> <span class="c1"># multi line string operator</span>
     <span class="s">mvn clean package</span>
-    <span class="s">dir</span></code></pre>
+    <span class="s">dir</span>
+<span class="s">...</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Innerhalb eines Jobs gibt es Schritte, die in der Reihenfolge ausgeführt werden, in der sie im YAML definiert sind. Ein Schritt kann eine Aktion (uses) oder ein Befehl (run) sein.</p>
+<p>Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, in der sie im YAML definiert sind. Ein Step kann eine Action (uses) oder ein Befehl (run) sein.</p>
 </div>
 <div class="sect2">
 <h3 id="_erklärung_der_häufigsten_schritte"><a class="anchor" href="#_erklärung_der_häufigsten_schritte"></a>5.1. Erklärung der häufigsten Schritte:</h3>
@@ -982,7 +1082,10 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Dies gibt an, dass eine GitHub Action aus dem GitHub Actions Marketplace oder aus einem anderen Repository verwendet werden soll. Die Action führt eine bestimmte Aufgabe aus.</p>
+<p>Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.</p>
+</li>
+<li>
+<p>Das Format von uses ist owner/repo@version.</p>
 </li>
 </ul>
 </div>
@@ -995,7 +1098,27 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>In diesem Beispiel wird die checkout-Action verwendet, um den Quellcode des Repositories herunterzuladen.</p>
+<p><a href="https://github.com/marketplace/actions/checkout">Checkout:</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Diese Aktion führt ein Checkout Ihres Repositories im Verzeichnis <code>$GITHUB_WORKSPACE</code> durch, sodass Ihr Workflow darauf zugreifen kann.</p>
+</li>
+<li>
+<p>Standardmäßig wird nur ein einzelner Commit abgerufen, der dem Ref/SHA entspricht, der den Workflow ausgelöst hat. Um die gesamte Historie aller Branches und Tags abzurufen, setzen Sie <code>fetch-depth: 0</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In GitHub Actions repräsentiert <code>github.ref</code> den Git-Referenznamen (z. B. einen Branch oder Tag), der das aktuelle Ereignis ausgelöst hat. Zum Beispiel kann dies ein Branch wie <code>refs/heads/main</code> oder ein Tag wie <code>refs/tags/v1.0</code> sein.</p>
+</li>
+<li>
+<p><code>github.sha</code> ist der Hash-Wert des Commits, der das Ereignis ausgelöst hat. Es handelt sich dabei um eine eindeutige Kennung des spezifischen Commits im Repository, der den Workflow gestartet hat.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -1005,22 +1128,41 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Dieser Schritt ermöglicht es, beliebige Shell-Befehle auszuführen, z.B. zum Installieren von Abhängigkeiten oder zum Erstellen des Projekts.</p>
+<p>Dies ermöglicht es, beliebige Shell-Befehle auszuführen, z.B. zum Installieren von Abhängigkeiten oder zum Erstellen des Projekts.</p>
 </li>
 </ul>
 </div>
 <div class="listingblock">
-<div class="title">Beispiel</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
-    <span class="s">mvn clean install</span>
+    <span class="s">mvn clean package</span>
     <span class="s">dir</span></code></pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Hier wird der Maven-Befehl clean install ausgeführt, um das Projekt zu bauen.</pre>
+<pre>Hier wird der Maven-Befehl clean package ausgeführt, um das Projekt zu bauen und schließlich wird der Inhalt des aktuellen Verzeichnisses aufgelistet.</pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>run: |</code> wird verwendet, damit jede Zeile als separater Befehl in der Shell-Konsole behandelt wird.</p>
+</li>
+<li>
+<p>Unterschiede:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>run: &#8230;&#8203;</code> führt einen einzelnen Befehl aus.</p>
+</li>
+<li>
+<p><code>run: | &#8230;&#8203;</code> wird verwendet, um mehrere Befehle als zusammenhängendes Skript auszuführen, wobei jede Zeile als separater Befehl behandelt wird.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -1028,7 +1170,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Viele GitHub Actions akzeptieren Parameter, die mit with angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.</p>
+<p>Viele GitHub Actions akzeptieren Parameter, die mit <code>with</code> angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.</p>
 </li>
 </ul>
 </div>
@@ -1042,7 +1184,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <div class="ulist">
 <ul>
 <li>
-<p>Dieser Schritt richtet eine Java-Umgebung ein und gibt die Java-Version an.</p>
+<p>Dieser Schritt richtet eine Java-Umgebung mit der Java-Version 17 ein.</p>
 </li>
 </ul>
 </div>
@@ -1057,7 +1199,6 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 </ul>
 </div>
 <div class="listingblock">
-<div class="title">Beispiel</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run tests</span>
   <span class="na">if</span><span class="pi">:</span> <span class="s">success()</span>
@@ -1072,55 +1213,80 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <h2 id="_umgebungsvariablen"><a class="anchor" href="#_umgebungsvariablen"></a>6. Umgebungsvariablen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat. Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.</p>
+<p>GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat.Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Umgebungsvariablen werden von Betriebssystemen oder Programmen verwendet, um Konfigurationen, Pfade oder andere Einstellungen bereitzustellen, die für die Ausführung von Programmen erforderlich sind.</p>
+</li>
+<li>
+<p>Umgebungsvariablen können systemweit oder benutzerspezifisch definiert werden und bieten eine flexible Möglichkeit, Werte wie Datenbankverbindungen, API-Schlüssel oder Verzeichnispfade zu verwalten.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_verwendung"><a class="anchor" href="#_verwendung"></a>6.1. Verwendung</h3>
+<div class="paragraph">
+<p>Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: <code>${{ &lt;quelle&gt;.&lt;variablenname&gt; }}</code>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Beispiel</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Echo github repo</span>
-  <span class="na">run</span><span class="pi">:</span> <span class="s">echo ${{ github.GITHUB_REPOSITORY }}</span></code></pre>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Echo env</span>
+  <span class="na">run</span><span class="pi">:</span> <span class="s">echo ${{ env.JAVA_VERSION }}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_wichtige_vorgegebene_github_umgebungsvariablen"><a class="anchor" href="#_wichtige_vorgegebene_github_umgebungsvariablen"></a>6.1. Wichtige vorgegebene GitHub-Umgebungsvariablen</h3>
+<h3 id="_wichtige_vorgegebene_github_umgebungsvariablen"><a class="anchor" href="#_wichtige_vorgegebene_github_umgebungsvariablen"></a>6.2. Wichtige vorgegebene GitHub-Umgebungsvariablen</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><code>GITHUB_REPOSITORY</code></strong>
-Diese Variable enthält den Namen des GitHub-Repositories im Format <code>owner/repository</code>. Sie gibt an, auf welchem Repository der Workflow ausgeführt wird.</p>
+<p><strong><code>github.repository</code></strong>
+Diese Variable enthält den Namen des GitHub-Repositories, auf dem der Workflow ausgeführt wird, im Format <code>owner/repository</code>.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_SHA</code></strong>
-Diese Variable enthält den vollständigen Commit-Hash des aktuellen Runs. Sie wird häufig verwendet, um eine Version des Deployments oder der Build-Dateien zu kennzeichnen.</p>
+<p><strong><code>github.sha</code></strong>
+Diese Variable enthält den vollständigen Commit-Hash des aktuellen Runs.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_EVENT_NAME</code></strong>
+<p><strong><code>github.event_name</code></strong>
 Diese Variable zeigt den Namen des Ereignisses, das den Workflow ausgelöst hat, wie z.B. <code>push</code>, <code>pull_request</code> oder <code>workflow_dispatch</code>.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_ACTOR</code></strong>
-Diese Variable enthält den Benutzernamen des GitHub-Benutzers, der den Workflow ausgelöst hat. Sie ist nützlich, um zu wissen, wer Änderungen am Repository vorgenommen hat.</p>
+<p><strong><code>github.actor</code></strong>
+Diese Variable enthält den Benutzernamen des GitHub-Benutzers, der den Workflow ausgelöst hat.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_AUTHOR</code></strong>
-Diese Variable gibt den Benutzernamen des Autors des letzten Commits im Repository an. Dies hilft dabei, den Ursprung von Änderungen nachzuvollziehen.</p>
+<p><strong><code>github.workflow</code></strong>
+Diese Variable enthält den Namen des aktuellen Workflows, der ausgeführt wird.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_WORKFLOW</code></strong>
-Diese Variable enthält den Namen des aktuellen Workflows, der ausgeführt wird. Sie wird genutzt, um zu wissen, welcher Workflow gerade aktiv ist.</p>
+<p><strong><code>github.run_id</code></strong>
+Diese Variable enthält die eindeutige ID des aktuellen Workflow-Runs.</p>
 </li>
 <li>
-<p><strong><code>GITHUB_RUN_ID</code></strong>
-Diese Variable enthält die eindeutige ID des aktuellen Workflow-Runs. Sie wird oft für Logging-Zwecke oder für die Verknüpfung von Ausgaben verwendet.</p>
-</li>
-<li>
-<p><strong><code>GITHUB_REF</code></strong>
-Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den Workflow ausgelöst hat. Sie hilft dabei, zu bestimmen, auf welchem Branch oder Tag der Workflow läuft.</p>
+<p><strong><code>github.ref</code></strong>
+Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den Workflow ausgelöst hat.</p>
 </li>
 </ul>
 </div>
+<details>
+<summary class="title">Screenshot mit Beispielen für mögliche Werte der Variablen</summary>
+<div class="content">
+<div class="imageblock">
+<div class="content">
+<img src="images/github-screenshot-logged-environment-variables.png" alt="github screenshot logged environment variables">
+</div>
+</div>
+</div>
+</details>
 <div class="paragraph">
 <p>Diese Umgebungsvariablen bieten eine einfache Möglichkeit, Kontextinformationen über den Workflow und das Repository zu erhalten, die dann in verschiedenen Workflow-Schritten weiterverwendet werden können. Sie sind besonders nützlich für Automatisierungsaufgaben wie Deployments, Tests und Benachrichtigungen.</p>
+</div>
+<div class="paragraph">
+<p>Weitere Umgebungsvariablen: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context">Github Context - GitHub Docs</a></p>
 </div>
 </div>
 </div>
@@ -1157,7 +1323,13 @@ Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den W
 <li>
 <p><strong>SSH-Schlüssel</strong> für den Zugriff auf Server</p>
 </li>
+<li>
+<p><strong>secrets.GITHUB_TOKEN</strong>: <a href="#_github_token">GitHub Token Kapitel</a></p>
+</li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Weitere Secrets: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#secrets-context">Secrets Context - GitHub Docs</a></p>
 </div>
 </div>
 <div class="sect2">
@@ -1243,7 +1415,7 @@ Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den W
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-07 14:45:20 UTC
+Last updated 2024-11-11 14:53:34 UTC
 </div>
 </div>
 </body>
