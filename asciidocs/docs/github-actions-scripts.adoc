@@ -75,7 +75,7 @@ jobs: #<.>
 * x64
 * gpu
 * self-hosted
-** https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners[Adding self-hosted runners - GitHub Docs]
+** https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners[Adding self-hosted runners - GitHub Docs^]
 <.> Steps sind Actions/Code-Snippets die von oben nach unten, nacheinander ausgeführt werden.
 <.> `uses`:
 * Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.
@@ -126,11 +126,11 @@ jobs:
 <.> Spezifiziert, dass es nur ausgeführt wird, wenn sich etwas in den angegebenen Pfaden verändert hat.
 <.> Spezifiziert, dass es nur ausgeführt wird, wenn das Event (in diesem Fall "push") auf dem Main-branch passiert.
 <.> Löst den Workflow aus, wenn ein Pull-Request Ereignis auftritt.
-* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request[Pull Request Events - GitHub Actions Docs]
+* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request[Pull Request Events - GitHub Actions Docs^]
 * Beispiele:
 ** `types: [opened, reopened]`
 <.> Löst den Workflow aus, wenn ein Workflow-Ereignis, bei einem angegebenen Workflow, auftritt.
-* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run[Worflow-runs Events - GitHub Actions Docs]
+* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run[Worflow-runs Events - GitHub Actions Docs^]
 <.> Der Name des Workflows, dessen Ereignisse überwacht werden. Dieser Name entspricht dem Wert, der im oberen Abschnitt des Skripts mit dem Schlüssel `name:` festgelegt wurde.
 <.> Es wird ausschließlich auf das Ereignis `completed` gewartet, d.h. der Workflow wird nur fortgesetzt, wenn der andere Workflow abgeschlossen ist.
 <.> Dies ermöglicht das manuelle Auslösen eines GitHub Workflows über die GitHub-Benutzeroberfläche.
@@ -205,14 +205,14 @@ Sie können die Berechtigungen anpassen, die dem GitHub_TOKEN standardmäßig zu
 *** GitHub Packages ist eine Plattform zum zentralen Hosting und Verwalten von Softwarepaketen und Containern.
 *** GitHub Packages ermöglicht, Pakete privat oder öffentlich zu hosten und sie als Abhängigkeiten in Projekten zu nutzen.
 *** Sie unterstützt DevOps-Workflows und gängige Paketmanager wie npm, Maven, Docker und NuGet.
-*** https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages[GitHub Packages - GitHub Docs]
+*** https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages[GitHub Packages - GitHub Docs^]
 * `pages`
 ** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Pages zu arbeiten. Zum Beispiel erlaubt `pages: write` einer Action, einen Build für GitHub Pages anzufordern.
 *** GitHub Pages sind öffentliche Webseiten, die direkt über GitHub gehostet und veröffentlicht werden.
 *** GitHub Pages eignet sich zur Präsentation von Open-Source-Projekten, zum Hosting eines Blogs oder anderem.
-*** https://docs.github.com/en/pages/quickstart[GitHub Pages - GitHub Docs]
+*** https://docs.github.com/en/pages/quickstart[GitHub Pages - GitHub Docs^]
 
-Alle Berechtigungen sind hier zu finden: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token[GitHub Token Berechtigungen - GitHub Docs]
+Alle Berechtigungen sind hier zu finden: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token[GitHub Token Berechtigungen - GitHub Docs^]
 
 == Steps
 
@@ -252,7 +252,7 @@ Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, i
 - uses: actions/checkout@v4
 ----
 
-* https://github.com/marketplace/actions/checkout[Checkout:]
+* https://github.com/marketplace/actions/checkout[Checkout:^]
 ** Diese Aktion führt ein Checkout Ihres Repositories im Verzeichnis `$GITHUB_WORKSPACE` durch, sodass Ihr Workflow darauf zugreifen kann.
 ** Standardmäßig wird nur ein einzelner Commit abgerufen, der dem Ref/SHA entspricht, der den Workflow ausgelöst hat. Um die gesamte Historie aller Branches und Tags abzurufen, setzen Sie `fetch-depth: 0`.
 *** In GitHub Actions repräsentiert `github.ref` den Git-Referenznamen (z. B. einen Branch oder Tag), der das aktuelle Ereignis ausgelöst hat. Zum Beispiel kann dies ein Branch wie `refs/heads/main` oder ein Tag wie `refs/tags/v1.0` sein.
@@ -351,7 +351,7 @@ image::github-screenshot-logged-environment-variables.png[]
 
 Diese Umgebungsvariablen bieten eine einfache Möglichkeit, Kontextinformationen über den Workflow und das Repository zu erhalten, die dann in verschiedenen Workflow-Schritten weiterverwendet werden können. Sie sind besonders nützlich für Automatisierungsaufgaben wie Deployments, Tests und Benachrichtigungen.
 
-Weitere Umgebungsvariablen: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context[Github Context - GitHub Docs]
+Weitere Umgebungsvariablen: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context[Github Context - GitHub Docs^]
 
 == GitHub Secrets
 
@@ -374,7 +374,7 @@ Einige häufige Beispiele für Secrets, die in GitHub Actions verwendet werden, 
 * *SSH-Schlüssel* für den Zugriff auf Server
 * *secrets.GITHUB_TOKEN*: <<_github_token, GitHub Token Kapitel>>
 
-Weitere Secrets: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#secrets-context[Secrets Context - GitHub Docs]
+Weitere Secrets: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#secrets-context[Secrets Context - GitHub Docs^]
 
 === Einrichten von GitHub Secrets
 
