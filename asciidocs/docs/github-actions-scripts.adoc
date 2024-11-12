@@ -68,7 +68,7 @@ jobs: #<.>
 
 ----
 
-<.> Das Event, das diesen Workflow triggert.
+<.> Das Event, oder die Events die diesen Workflow triggern.
 <.> Ein Skript besteht aus einem oder mehreren "Jobs", die Parallel, auf eigenen Umgebungen laufen.
 <.> Dieser "Job" läuft auf einer Umgebung mit dem Betriebssystem "ubuntu 24.04". Weiter Umgebungen sind:
 * linux
@@ -124,13 +124,13 @@ jobs:
 
 <.> Löst den Workflow bei einem git push-Ereignis aus.
 <.> Spezifiziert, dass es nur ausgeführt wird, wenn sich etwas in den angegebenen Pfaden verändert hat.
-<.> Spezifiziert, dass es nur ausgeführt wird, wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.
+<.> Spezifiziert, dass es nur ausgeführt wird, wenn das Event (in diesem Fall "push") auf dem Main-branch passiert.
 <.> Löst den Workflow aus, wenn ein Pull-Request Ereignis auftritt.
 * Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request[Pull Request Events - GitHub Actions Docs]
 * Beispiele:
 ** `types: [opened, reopened]`
 <.> Löst den Workflow aus, wenn ein Workflow-Ereignis, bei einem angegebenen Workflow, auftritt.
-* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run[Pull Request Events - GitHub Actions Docs]
+* Weitere Informationen: https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run[Worflow-runs Events - GitHub Actions Docs]
 <.> Der Name des Workflows, dessen Ereignisse überwacht werden. Dieser Name entspricht dem Wert, der im oberen Abschnitt des Skripts mit dem Schlüssel `name:` festgelegt wurde.
 <.> Es wird ausschließlich auf das Ereignis `completed` gewartet, d.h. der Workflow wird nur fortgesetzt, wenn der andere Workflow abgeschlossen ist.
 <.> Dies ermöglicht das manuelle Auslösen eines GitHub Workflows über die GitHub-Benutzeroberfläche.
@@ -202,8 +202,15 @@ Sie können die Berechtigungen anpassen, die dem GitHub_TOKEN standardmäßig zu
 ** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit dem Inhalt des Repositories zu arbeiten. Zum Beispiel erlaubt `contents: read` einer Action, die Commits aufzulisten, und `contents: write` ermöglicht es der Action, einen Release zu erstellen.
 * `packages`
 ** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Packages zu arbeiten. Zum Beispiel erlaubt `packages: write` einer Action, Pakete auf GitHub Packages hochzuladen und zu veröffentlichen.
+*** GitHub Packages ist eine Plattform zum zentralen Hosting und Verwalten von Softwarepaketen und Containern.
+*** GitHub Packages ermöglicht, Pakete privat oder öffentlich zu hosten und sie als Abhängigkeiten in Projekten zu nutzen.
+*** Sie unterstützt DevOps-Workflows und gängige Paketmanager wie npm, Maven, Docker und NuGet.
+*** https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages[GitHub Packages - GitHub Docs]
 * `pages`
 ** Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Pages zu arbeiten. Zum Beispiel erlaubt `pages: write` einer Action, einen Build für GitHub Pages anzufordern.
+*** GitHub Pages sind öffentliche Webseiten, die direkt über GitHub gehostet und veröffentlicht werden.
+*** GitHub Pages eignet sich zur Präsentation von Open-Source-Projekten, zum Hosting eines Blogs oder anderem.
+*** https://docs.github.com/en/pages/quickstart[GitHub Pages - GitHub Docs]
 
 Alle Berechtigungen sind hier zu finden: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token[GitHub Token Berechtigungen - GitHub Docs]
 
@@ -237,7 +244,7 @@ Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, i
 ==== uses
 * Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.
 
-* Das Format von uses ist owner/repo@version.
+* Das Format von uses ist `owner/repo@version`.
 
 .Beispiel
 [source,yaml]
@@ -274,6 +281,7 @@ Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, i
 
 * Viele GitHub Actions akzeptieren Parameter, die mit `with` angegeben werden. Diese Parameter steuern, wie die Action ausgeführt wird.
 
+[source,yaml]
 ----
 - uses: actions/setup-java@v4
   with:
@@ -296,14 +304,14 @@ Innerhalb eines Jobs gibt es Steps, die in der Reihenfolge ausgeführt werden, i
 [#_umgebungsvariablen]
 == Umgebungsvariablen
 
-GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat.Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.
+GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat. Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.
 
 * Umgebungsvariablen werden von Betriebssystemen oder Programmen verwendet, um Konfigurationen, Pfade oder andere Einstellungen bereitzustellen, die für die Ausführung von Programmen erforderlich sind.
 * Umgebungsvariablen können systemweit oder benutzerspezifisch definiert werden und bieten eine flexible Möglichkeit, Werte wie Datenbankverbindungen, API-Schlüssel oder Verzeichnispfade zu verwalten.
 
 === Verwendung
 
-Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: `${{ <quelle>.<variablenname> }}`.
+Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: `${{ <quelle>.<variablenname> }}`
 
 .Beispiel
 [source,yaml]
@@ -424,5 +432,5 @@ jobs:
 
 In GitHub Actions, die `concurrency`-Einstellung ermöglicht es dir, die gleichzeitige Ausführung von Workflows zu steuern, um zu verhindern, dass mehrere Instanzen eines Workflows gleichzeitig laufen, was in einigen Fällen zu Problemen führen könnte. Sie wird mit einer Gruppenzuordnung kombiniert, die hilft, verschiedene Workflows zu organisieren und Konflikte zu vermeiden.
 
-image::https://www.plantuml.com/plantuml/png/VP7FJiCm38VlVWfh757t09k4rlO0793uSqGxUAbfewLEbJWIUtl2Ef6ommwjek_dVhNZNLGAcaO7yMXbea0Z6ZzENbZqGq-ECR1Hajun0FMPukSBMTc3UCsXxGU5re-ZrOWrtcEJdnO6cYOM94LX2kw4EZ146XdLvXT9X-S_G-PuvezMdz81QgFMIyHeWfsoqd-L4kF5f11Op0dwuDEq1iuYyLfwUqyY7B3Uuzr4Zll0B5jdXJVbk3vurssLl_K25xDiy5dmDVWSn7WbRNwbLewpBt0tspgA0rzy6VwtjII67NTNglPMVxFnPeTlYHC3pAkekcerhm3h5PHZzOURWfi5RbUmB0_LGxc_vGUBe2b1kmpoH00xbYwDxWS0[]
+image::https:////www.plantuml.com/plantuml/png/VP7DJiCm383lVWfh757t09k4rbO8E23nSqGxUAbfewLEbJY8lJrX6stPOOT4rcVhYnrlebBGr3k8Uoi31UhH-7xmmgBlUd2CWOsIj8u1gCqKFvx9oXR4QqxQjbEu_yeyOectMELJGqV3m8AaA4p17L0xXaWzezfyaJHuV1WonoD_iFgOTb0QjLuYHXFia9N-SoenNamAWSKSe0q-3KlWB1AlKsjlIOG3bbky6SXn6vXbxQpmQWgNE--QjVAtdk5ib1K-2Ru4dnCnNaYhNwcL_SaNk3dP6eeTdtqP_hVL98OTDnUg-af_e_5AXw-94mESDb4qnUAu0ImNC4R57wn6M4smNi2iD1HtqyzDrNDUZRoUypm9m8QbIRtx0G00[]
 
