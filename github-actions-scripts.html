@@ -565,7 +565,7 @@ pre.rouge .gs {
 <div class="details">
 <span id="author" class="author">Arwed Schnalzenberger</span><br>
 <span id="revnumber">version 1.0.0,</span>
-<span id="revdate">2024-11-11</span>
+<span id="revdate">2024-11-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -716,7 +716,7 @@ Bei GitHub Actions ist es wichtig auf richtige Einrückungen zu achten!
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Das Event, das diesen Workflow triggert.</td>
+<td>Das Event, oder die Events die diesen Workflow triggern.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -842,7 +842,7 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Spezifiziert, dass es nur ausgeführt wird, wenn die Aktion (in diesem Fall "git push") auf dem Main-branch passiert.</td>
+<td>Spezifiziert, dass es nur ausgeführt wird, wenn das Event (in diesem Fall "push") auf dem Main-branch passiert.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -871,7 +871,7 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <div class="ulist">
 <ul>
 <li>
-<p>Weitere Informationen: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run">Pull Request Events - GitHub Actions Docs</a></p>
+<p>Weitere Informationen: <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run">Worflow-runs Events - GitHub Actions Docs</a></p>
 </li>
 </ul>
 </div></td>
@@ -1027,6 +1027,22 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <ul>
 <li>
 <p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Packages zu arbeiten. Zum Beispiel erlaubt <code>packages: write</code> einer Action, Pakete auf GitHub Packages hochzuladen und zu veröffentlichen.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GitHub Packages ist eine Plattform zum zentralen Hosting und Verwalten von Softwarepaketen und Containern.</p>
+</li>
+<li>
+<p>GitHub Packages ermöglicht, Pakete privat oder öffentlich zu hosten und sie als Abhängigkeiten in Projekten zu nutzen.</p>
+</li>
+<li>
+<p>Sie unterstützt DevOps-Workflows und gängige Paketmanager wie npm, Maven, Docker und NuGet.</p>
+</li>
+<li>
+<p><a href="https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages">GitHub Packages - GitHub Docs</a></p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -1037,6 +1053,19 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <ul>
 <li>
 <p>Ermöglicht einer Action, die den GITHUB_TOKEN verwendet, mit GitHub Pages zu arbeiten. Zum Beispiel erlaubt <code>pages: write</code> einer Action, einen Build für GitHub Pages anzufordern.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GitHub Pages sind öffentliche Webseiten, die direkt über GitHub gehostet und veröffentlicht werden.</p>
+</li>
+<li>
+<p>GitHub Pages eignet sich zur Präsentation von Open-Source-Projekten, zum Hosting eines Blogs oder anderem.</p>
+</li>
+<li>
+<p><a href="https://docs.github.com/en/pages/quickstart">GitHub Pages - GitHub Docs</a></p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -1085,7 +1114,7 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <p>Anstatt eine Funktion manuell zu schreiben, ermöglicht uses die Integration von bestehenden GitHub Actions (entweder aus dem GitHub Marketplace oder einem öffentlichen Repository) direkt im Workflow.</p>
 </li>
 <li>
-<p>Das Format von uses ist owner/repo@version.</p>
+<p>Das Format von uses ist <code>owner/repo@version</code>.</p>
 </li>
 </ul>
 </div>
@@ -1176,9 +1205,9 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>- uses: actions/setup-java@v4
-  with:
-    java-version: 17</pre>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-java@v4</span>
+  <span class="na">with</span><span class="pi">:</span>
+    <span class="na">java-version</span><span class="pi">:</span> <span class="s">17</span></code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -1213,7 +1242,7 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <h2 id="_umgebungsvariablen"><a class="anchor" href="#_umgebungsvariablen"></a>6. Umgebungsvariablen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat.Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.</p>
+<p>GitHub Actions stellt eine Reihe von vorgegebenen Umgebungsvariablen zur Verfügung, die wichtige Informationen über das Repository, den Workflow und den Benutzer liefern, der den Workflow ausgelöst hat. Diese Variablen können innerhalb eines Workflows verwendet werden, um dynamische Daten zu verwalten und in verschiedenen Schritten des Workflows zu nutzen.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1228,7 +1257,7 @@ Die Workflow-Dateien im Format <code>.yaml</code> müssen im Verzeichnis <code>.
 <div class="sect2">
 <h3 id="_verwendung"><a class="anchor" href="#_verwendung"></a>6.1. Verwendung</h3>
 <div class="paragraph">
-<p>Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: <code>${{ &lt;quelle&gt;.&lt;variablenname&gt; }}</code>.</p>
+<p>Die Verwendung von Umgebungsvariablen erfolgt durch Anwendung des folgenden Formats: <code>${{ &lt;quelle&gt;.&lt;variablenname&gt; }}</code></p>
 </div>
 <div class="listingblock">
 <div class="title">Beispiel</div>
@@ -1405,7 +1434,7 @@ Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den W
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="https://www.plantuml.com/plantuml/png/VP7FJiCm38VlVWfh757t09k4rlO0793uSqGxUAbfewLEbJWIUtl2Ef6ommwjek_dVhNZNLGAcaO7yMXbea0Z6ZzENbZqGq-ECR1Hajun0FMPukSBMTc3UCsXxGU5re-ZrOWrtcEJdnO6cYOM94LX2kw4EZ146XdLvXT9X-S_G-PuvezMdz81QgFMIyHeWfsoqd-L4kF5f11Op0dwuDEq1iuYyLfwUqyY7B3Uuzr4Zll0B5jdXJVbk3vurssLl_K25xDiy5dmDVWSn7WbRNwbLewpBt0tspgA0rzy6VwtjII67NTNglPMVxFnPeTlYHC3pAkekcerhm3h5PHZzOURWfi5RbUmB0_LGxc_vGUBe2b1kmpoH00xbYwDxWS0" alt="VP7FJiCm38VlVWfh757t09k4rlO0793uSqGxUAbfewLEbJWIUtl2Ef6ommwjek dVhNZNLGAcaO7yMXbea0Z6ZzENbZqGq ECR1Hajun0FMPukSBMTc3UCsXxGU5re ZrOWrtcEJdnO6cYOM94LX2kw4EZ146XdLvXT9X S G PuvezMdz81QgFMIyHeWfsoqd L4kF5f11Op0dwuDEq1iuYyLfwUqyY7B3Uuzr4Zll0B5jdXJVbk3vurssLl K25xDiy5dmDVWSn7WbRNwbLewpBt0tspgA0rzy6VwtjII67NTNglPMVxFnPeTlYHC3pAkekcerhm3h5PHZzOURWfi5RbUmB0 LGxc vGUBe2b1kmpoH00xbYwDxWS0">
+<img src="https:////www.plantuml.com/plantuml/png/VP7DJiCm383lVWfh757t09k4rbO8E23nSqGxUAbfewLEbJY8lJrX6stPOOT4rcVhYnrlebBGr3k8Uoi31UhH-7xmmgBlUd2CWOsIj8u1gCqKFvx9oXR4QqxQjbEu_yeyOectMELJGqV3m8AaA4p17L0xXaWzezfyaJHuV1WonoD_iFgOTb0QjLuYHXFia9N-SoenNamAWSKSe0q-3KlWB1AlKsjlIOG3bbky6SXn6vXbxQpmQWgNE--QjVAtdk5ib1K-2Ru4dnCnNaYhNwcL_SaNk3dP6eeTdtqP_hVL98OTDnUg-af_e_5AXw-94mESDb4qnUAu0ImNC4R57wn6M4smNi2iD1HtqyzDrNDUZRoUypm9m8QbIRtx0G00" alt="VP7DJiCm383lVWfh757t09k4rbO8E23nSqGxUAbfewLEbJY8lJrX6stPOOT4rcVhYnrlebBGr3k8Uoi31UhH 7xmmgBlUd2CWOsIj8u1gCqKFvx9oXR4QqxQjbEu yeyOectMELJGqV3m8AaA4p17L0xXaWzezfyaJHuV1WonoD iFgOTb0QjLuYHXFia9N SoenNamAWSKSe0q 3KlWB1AlKsjlIOG3bbky6SXn6vXbxQpmQWgNE  QjVAtdk5ib1K 2Ru4dnCnNaYhNwcL SaNk3dP6eeTdtqP hVL98OTDnUg af e 5AXw 94mESDb4qnUAu0ImNC4R57wn6M4smNi2iD1HtqyzDrNDUZRoUypm9m8QbIRtx0G00">
 </div>
 </div>
 </div>
@@ -1415,7 +1444,7 @@ Diese Variable zeigt den Git-Referenznamen, wie einen Branch oder Tag, der den W
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2024-11-11 14:53:34 UTC
+Last updated 2024-11-12 10:14:41 UTC
 </div>
 </div>
 </body>

@@ -3,7 +3,7 @@ skinparam componentStyle rectangle
 
 agent [Main]
 note right
-Commits A + B + C
+Events A + B + C
 happen at nearly the
 same time and start
 the same GitHub
@@ -19,12 +19,12 @@ note right: Canceled
 agent [Runner C] #palegreen;line:green;line.dashed;text:green;
 note right: In Queue
 
-[Main]-d-"Commit A"
-"Commit A"--"Commit B"
-"Commit B"--"Commit C"
+[Main]-d-"Event A"
+"Event A"--"Event B"
+"Event B"--"Event C"
 
-"Commit A"-r->[Runner A]
-"Commit B"-r->[Runner B]
-"Commit C"-r->[Runner C]
+"Event A"-r->[Runner A]
+"Event B"-r->[Runner B]
+"Event C"-r->[Runner C]
 
 @enduml
